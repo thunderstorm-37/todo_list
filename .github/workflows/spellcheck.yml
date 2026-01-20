@@ -18,14 +18,9 @@ jobs:
         run: |
           pip install pyspellchecker
 
-      - name: Run custom spell check (English only)
+      - name: Run custom spell check 
         run: |
           python .github/scripts/spellcheck.py
         continue-on-error: true  # 允许拼写错误时不立即失败
 
-      - name: Upload spell check report
-        uses: actions/upload-artifact@v3
-        if: always()  # 总是上传报告，无论是否失败
-        with:
-          name: spellcheck-report
-          path: spellcheck_report.txt
+      - 
