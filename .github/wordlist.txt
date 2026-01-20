@@ -13,6 +13,8 @@ mathrsfs
 usepackage
 ZhuHuatao
 latexmk
+xelatex
+qrpg
 pdf
 tex
 md
