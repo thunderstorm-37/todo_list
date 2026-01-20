@@ -355,3 +355,9 @@ microtype
 refcheck
 unharmful
 xcolor
+UTF
+ctex
+ctexart
+fontenc
+textit
+newpage
