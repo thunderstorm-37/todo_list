@@ -1,5 +1,5 @@
 name: Spell Check 
-on: [push, pull_request]
+on: [push]
 
 jobs:
   spellcheck:
@@ -23,4 +23,4 @@ jobs:
           python .github/scripts/spellcheck.py
         continue-on-error: true  # 允许拼写错误时不立即失败
 
-      - 
+      
