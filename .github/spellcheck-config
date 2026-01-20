@@ -1,41 +1,23 @@
-spellcheck:
-  # 要检查的文件扩展名
-  extensions:
-    - .tex
-    - .md
-  
-  # 忽略的目录
-  ignore_dirs:
-    - .git
-    - .github
-    - node_modules
-    - build
-    - dist
-    - __pycache__
-  
-  # 忽略的文件模式
-  ignore_patterns:
-    - "*.log"
-    - "*.aux"
-    - "*.pdf"
-    - "*.png"
-    - "*.jpg"
-    - "*.jpeg"
-  
-  # 自定义词典（项目特定词汇）
-  custom_words:
-    - github
-    - tex
-    - latex
-    - markdown
-    - endwhile
-    - endif
-    - endfor
-    - algorithm
-    - pseudocode
-    - bibliography
-  
-  # 语言设置
-  language: en
-  ignore_chinese: true  # 忽略中文字符
-  min_word_length: 3    # 忽略少于3个字母的单词
+
+  matrix:
+  - name: Markdown and TeX
+    aspell:
+      lang: en
+    hunspell:
+      d: en_US
+    dictionary:
+      wordlists:
+        - .github/wordlist.txt 
+      output: wordlist.dic
+    pipeline:
+      - pyspelling.filters.markdown:
+          markdown_extensions:
+            - markdown.extensions.fenced_code
+      - pyspelling.filters.html:
+          comments: false
+          ignores:
+            - code
+            - pre
+    sources:
+      - '**/*.md'
+      - '**/*.tex'

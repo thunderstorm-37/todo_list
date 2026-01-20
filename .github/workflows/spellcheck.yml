@@ -1,5 +1,5 @@
-name: Spell Check 
-on: [push]
+name: Spell Check
+on: [push] 
 
 jobs:
   spellcheck:
@@ -9,18 +9,8 @@ jobs:
       - name: Checkout code
         uses: actions/checkout@v3
 
-      - name: Set up Python
-        uses: actions/setup-python@v4
+      - name: Run spellcheck
+        uses: rojopolis/spellcheck-github-actions@0.41.0
         with:
-          python-version: '3.10'
-
-      - name: Install pyspellchecker
-        run: |
-          pip install pyspellchecker
-
-      - name: Run custom spell check 
-        run: |
-          python .github/scripts/spellcheck.py
-        continue-on-error: true  # 允许拼写错误时不立即失败
-
+          config_path: .github/spellcheck-config.yml
       
