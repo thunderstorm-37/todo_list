@@ -392,9 +392,9 @@ In addition, we define
 $$ \mathcal{A}^* = \{\bigcap \mathcal{B}: \mathcal{B} \subset \mathcal{A} \text{ and } |\mathcal{B}| \text{ is finite} \}.
 $$
 If $\mathcal{A},\mathcal{B} \subset 2^X$, we write
-$$ \mathcal{A} \vdash \mathcal{B} \Leftrightarrow \forall B \in \mathcal{B},\ \exists A \in \mathcal{A}:\ A \subset B,$$
+$$ \mathcal{A} \vdash \mathcal{B} \iff \forall B \in \mathcal{B},\ \exists A \in \mathcal{A}:\ A \subset B,$$
 and
-$$ \mathcal{A} \prec \mathcal{B} \Leftrightarrow \forall A \in \mathcal{A},\ \exists B \in \mathcal{B}:\ A \subset B.
+$$ \mathcal{A} \prec \mathcal{B} \iff \forall A \in \mathcal{A},\ \exists B \in \mathcal{B}:\ A \subset B.
 $$
 
 \begin{definition}~\label{def1.1}
@@ -450,6 +450,96 @@ If $F$ is symmetric, transitive, and reflexive, we say that $F$ is an \textbf{eq
 Fix a relation $F\subset X\times Y$. We can view $F$ as the correspondence
 $$ F:X \rightarrow 2^Y, \quad x \mapsto Fx. $$
 Thus $F$ is a set-valued function. In applications, we often consider the special case that for each $x\in X$, the set $Fx$ contains exactly one element. In that case we say $F$ is a \textbf{function} from $X$ to $Y$.
+
+\section{Abstract Space}
+
+\subsection{Uniform Space}
+The definition of uniform space is similar to that of topological space. The difference is that in a uniform space, the neighborhoods of points are defined by relations instead of subsets.
+\begin{definition}~\label{def2.1}   
+    Let $X$ be a nonempty set. A nonempty family $\mathcal{U}$ of relations on $X$ is called a \textbf{uniform structure} on $X$ if it satisfies the following conditions:
+    \begin{enumerate}
+        \item For any $U \in \mathcal{U}$, $\Delta_X \subset U$, where $\Delta_X = \{(x,x): x \in X\}$ is the diagonal of $X \times X$;
+        \item If $U \in \mathcal{U}$, then $U^{-1} \in \mathcal{U}$;
+        \item For any $U \in \mathcal{U}$, there exists $V \in \mathcal{U}$ such that $V \circ V \subset U$;
+        \item $\mathcal{U}$ is a filter on $X \times X$.
+    \end{enumerate}
+    The space $X$ or the pair $(X,\mathcal{U})$ is called a \textbf{uniform space}.
+\end{definition}
+For any base of the filter $\mathcal{U}$, we call it a \textbf{base} of the uniform structure $(X,\mathcal{U})$.
+For any $U \in \mathcal{U}$, $U \cap U^{-1} = (U \cap U^{-1})^{-1} \in \mathcal{U}$.
+Moreover, we have an element $V \in \mathcal{U}$ such that $V \circ V \subset U$. 
+By the fact that $V=V \circ \Delta \subset V \circ V  $, 
+we have $V \circ V \in \mathcal{U}$. Thus the set $\{U \cap U^{-1}:U \in \mathcal{U}\}$ 
+or $\{V \circ V:V \in \mathcal{U}\}$ forms a base of $\mathcal{U}$.
+
+The condition (b) in Definition~\eqref{def2.1} means that for any $x,y \in X$,
+\[
+x=y \iff (x,y) \in U \text{ for all } U \in \mathcal{U}.
+\]
+We can say that the more $U \in \mathcal{U}$ "small", the closer $x$ and $y$ are.
+The uniform structure $\mathcal{U}$ provides a set of criteria that measure the closeness between two points in the space $X$.
+Those facts naturally lead to the definition of uniform neighborhood, i.e.,
+\[
+    \mathcal{N}_x = \{U(x): U \in \mathcal{U}\}, \quad \text{for any } x \in X.
+\]
+Next, we are going to prove that, there exists a unique topology $\tau$ on $X$
+such that for any $x \in X$, $\mathcal{N}_x$ is the neighborhood system of $x$ with respect to the topology $\tau$.
+We call $\tau$ the \textbf{uniform topology} induced by the uniform structure $\mathcal{U}$.
+\begin{theorem} \label{thm2.1}
+    Suppose that $(X,\mathcal{U})$ is a uniform space. Then the following conclusions holds:
+    \begin{enumerate}
+        \item There exists a unique hausdorff topology $\tau$ on $X$ such that for any $x \in X$,
+            $\mathcal{N}_x$ is the neighborhood system of $x$ with respect to $\tau$.
+        \item Suppose that $\mathcal{B} \subset \mathcal{U}$ is a base of $\mathcal{U}$. Define
+            $$ \mathcal{B}_x = \{B(x): B \in \mathcal{B}\}. $$
+            Then for any $x \in X$, $\mathcal{B}_x$ is a base of the neighborhood system $\mathcal{N}_x$ with respect to the uniform topology $\tau$.
+            Thus if $\mathcal{B}$ is countable, the uniform topology $\tau$ is first countable.
+        \item For any $A \in X$ and $M \in X \times X$, we have the following closure formulas with respect to the uniform topology $\tau$:
+            $$ \bar{A}=\bigcap_{U \in \mathcal{U}} U(A) $$
+            and 
+            $$ \bar{M} = \bigcap_{U \in \mathcal{U}} (U \circ M \circ U). $$
+            The uniform structure $\mathcal{U}$ can be replaced by any base of $\mathcal{U}$.
+    \end{enumerate}
+\end{theorem}
+\begin{proof}
+    \begin{enumerate}
+        \item define
+            $$ \tau = \{A \subset X: \forall x \in A,\ \exists U \in \mathcal{N}_x,\ U \subset A\}. $$
+            First we prove that $\tau$ is a topology on $X$.
+            We have that~$X,\emptyset \in \tau$. 
+            For any~$A,B \in \tau$, we have~$A \cap B \in \tau$. In fact, for any~$x \in A \cap B$, 
+            there exist~$U,V \in \mathcal{N}_x$ such that~$U \subset A$ and~$V \subset B$. 
+            Then~$U \cap V \in \mathcal{N}_x$ and~$U \cap V \subset A \cap B$. 
+            Finally, for any family~$\{A_i\}_{i \in I} \subset \tau$, we have~$\bigcup_{i \in I} A_i \in \tau$. 
+            In fact, for any~$x \in \bigcup_{i \in I} A_i$, there exists~$j \in I$ such that~$x \in A_j$. 
+            Since~$A_j \in \tau$, there exists~$U \in \mathcal{N}_x$ such that~$U \subset A_j \subset \bigcup_{i \in I} A_i$. 
+            Thus~$\tau$ is a topology on~$X$.
+
+            Next we prove that for any~$x \in X$,~$\mathcal{N}_x$ is the neighborhood system of~$x$ with respect to the topology~$\tau$.
+            Let $\mathcal{A}_x$ be the neighborhood system of $x$ with respect to $\tau$.
+            For any $U \in \mathcal{N}_x$, by the definition of $\tau$, we have $U \in \mathcal{A}_x$ and thus $\mathcal{N}_x \subset \mathcal{A}_x$.
+            Conversely, for any $A \in \mathcal{A}_x$, by the definition of $\tau$, there exists $U \in \mathcal{N}_x$ such that $U \subset A$.
+            Thus we have~$A \in \mathcal{N}_x$ and $\mathcal{A}_x \subset \mathcal{N}_x$.
+            Therefore, $\mathcal{N}_x$ is the neighborhood system of $x$ with respect to the topology $\tau$.
+
+            Finally, we prove that the topology $\tau$ is hausdorff.
+            For any two distinct points $x,y \in X$, there exists $U \in \mathcal{U}$ such that $(x,y) \notin U$.
+            Then $y \notin U(x)$. Since $U(x) \in \mathcal{N}_x$,  then~$U(x)$ is a neighborhood of $x$ not containing $y$.
+            Similarly, there exists a neighborhood of $y$ not containing $x$.
+        \item It's straightforward by conclusion (a) of Theorem~\eqref{thm2.1}.
+        \item By the definition of closure, we have
+            $$ x \in \bar{A} \iff \forall U \in \mathcal{U},\ U(x) \cap A \neq \emptyset, $$
+            which is equivalent to
+            $$ \bar{A} = \bigcap_{U \in \mathcal{U}} U(A). $$
+            The second closure formula can be proved similarly.
+    \end{enumerate}
+\end{proof}
+From the construction of the neighborhood system $\mathcal{N}_x$, 
+we can see that the local structure of a uniform space is uniform everywhere.
+In fact, for any $x,y \in X$ and any $U \in \mathcal{U}$, we have
+$$ U(y) = U \circ \{y\} = U \circ \Delta_X (y) \supset U \circ U (x). $$
+By the condition (c) in Definition~\eqref{def2.1}, there exists $V \in \mathcal{U}$ such that $V \circ V \subset U$.
+Thus we have $V(x) \subset U(y)$. By symmetry, we also have $V(y) \subset U(x)$.
 
 
 %%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
