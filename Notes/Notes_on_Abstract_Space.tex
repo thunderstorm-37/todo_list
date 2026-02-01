@@ -353,6 +353,7 @@
 %\newcommand{\REVISEred}{}
 %\newcommand{\COMMENT}[1]{}  % Input ignored.
 
+\usepackage{xfrac}
 
 %%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
 \title{Notes on Abstract Space}
@@ -430,7 +431,7 @@ For any two nonempty sets $X$ and $Y$, we consider elements $x\in X$ and $y\in Y
 \begin{definition}~\label{def1.3}
     Let $X$ and $Y$ be two nonempty sets. Any subset $F \subset X \times Y$ 
     is called a \textbf{relation} from $X$ to $Y$. When $(x,y) \in F$, we say that
-    $x$ is related to $y$ by the relation $F$, denoted by $xFy$ or $y\in Fx$.
+    $x$ is related to $y$ by the relation~$F$, denoted by $xFy$ or $y\in Fx$.
     If $F \subset X \times X$, we call it a \textbf{binary relation} on $X$. 
 \end{definition}
 
@@ -469,8 +470,8 @@ For any base of the filter $\mathcal{U}$, we call it a \textbf{base} of the unif
 For any $U \in \mathcal{U}$, $U \cap U^{-1} = (U \cap U^{-1})^{-1} \in \mathcal{U}$.
 Moreover, we have an element $V \in \mathcal{U}$ such that $V \circ V \subset U$. 
 By the fact that $V=V \circ \Delta \subset V \circ V  $, 
-we have $V \circ V \in \mathcal{U}$. Thus the set $\{U \cap U^{-1}:U \in \mathcal{U}\}$ 
-or $\{V \circ V:V \in \mathcal{U}\}$ forms a base of $\mathcal{U}$.
+we have $V \circ V \in \mathcal{U}$. Thus the set~$\{U \cap U^{-1}:U \in \mathcal{U}\}$ 
+or $\{V \circ V:V \in \mathcal{U}\}$ either forms a base of $\mathcal{U}$.
 
 The condition (b) in Definition~\eqref{def2.1} means that for any $x,y \in X$,
 \[
@@ -483,8 +484,8 @@ Those facts naturally lead to the definition of uniform neighborhood, i.e.,
     \mathcal{N}_x = \{U(x): U \in \mathcal{U}\}, \quad \text{for any } x \in X.
 \]
 Next, we are going to prove that, there exists a unique topology $\tau$ on $X$
-such that for any $x \in X$, $\mathcal{N}_x$ is the neighborhood system of $x$ with respect to the topology $\tau$.
-We call $\tau$ the \textbf{uniform topology} induced by the uniform structure $\mathcal{U}$.
+such that for any~$x \in X$, $\mathcal{N}_x$ is the neighborhood system of $x$ with respect to the topology $\tau$.
+We call~$\tau$ the \textbf{uniform topology} induced by the uniform structure $\mathcal{U}$.
 \begin{theorem} \label{thm2.1}
     Suppose that $(X,\mathcal{U})$ is a uniform space. Then the following conclusions holds:
     \begin{enumerate}
@@ -523,7 +524,7 @@ We call $\tau$ the \textbf{uniform topology} induced by the uniform structure $\
             Therefore, $\mathcal{N}_x$ is the neighborhood system of $x$ with respect to the topology $\tau$.
 
             Finally, we prove that the topology $\tau$ is hausdorff.
-            For any two distinct points $x,y \in X$, there exists $U \in \mathcal{U}$ such that $(x,y) \notin U$.
+            For any two distinct points~$x,y \in X$, there exists $U \in \mathcal{U}$ such that $(x,y) \notin U$.
             Then $y \notin U(x)$. Since $U(x) \in \mathcal{N}_x$,  then~$U(x)$ is a neighborhood of $x$ not containing $y$.
             Similarly, there exists a neighborhood of $y$ not containing $x$.
         \item It's straightforward by conclusion (a) of Theorem~\eqref{thm2.1}.
@@ -536,11 +537,116 @@ We call $\tau$ the \textbf{uniform topology} induced by the uniform structure $\
 \end{proof}
 From the construction of the neighborhood system $\mathcal{N}_x$, 
 we can see that the local structure of a uniform space is uniform everywhere.
-In fact, for any $x,y \in X$ and any $U \in \mathcal{U}$, we have
-$$ U(y) = U \circ \{y\} = U \circ \Delta_X (y) \supset U \circ U (x). $$
-By the condition (c) in Definition~\eqref{def2.1}, there exists $V \in \mathcal{U}$ such that $V \circ V \subset U$.
-Thus we have $V(x) \subset U(y)$. By symmetry, we also have $V(y) \subset U(x)$.
+In other words, for any two points~$x,y \in X$, there exists a natural correspondence between the neighborhood systems $\mathcal{N}_x$ and $\mathcal{N}_y$.
 
+As we have mentionded that the uniform structure $\mathcal{U}$ provides a set of criteria that measure the closeness between two points in the space $X$,
+we hope to use some numerical values to describe the closeness.
+Basicaly, we expect that there exists a metric that induces the uniform structure $\mathcal{U}$.
+However, this is not always possible.
+\begin{theorem} \label{thm2.2}
+    Let $(X,\mathcal{U})$ be a uniform space. 
+    There exists a metric $d$ on $X$ inducing the uniform structure $\mathcal{U}$ if and only if 
+    $\mathcal{U}$ has a countable base.
+\end{theorem}
+\begin{proof}
+    The only if part is trivial. We only prove the if part.
+    Suppose that $\mathcal{U}$ has a countable base $\{U_n:n \in \NN\}$.
+    Without loss of generality, we can assume that $U_n$ is symmetric and
+    $$ U_n \circ U_n \circ U_n \subset U_{n-1} \quad \text{for all } n \geq 1, $$
+    where we set $U_0 = X \times X$.
+    For any $x,y \in X$, define
+    $$ f(x,y)=
+    \begin{cases}
+        2^{-n}, & \text{if } (x,y) \in U_n \text{ and } (x,y) \notin U_{n+1} \text{ for some } n \in \NN, \\
+        0, & \text{if } x=y,
+    \end{cases}  $$
+    and 
+    $$ d(x,y) = \inf\left\{\sum_{i=1}^m f(x_{i-1},x_i): m \in \NN, x_0=x, x_m=y, x_i \in X \text{ for } i=1,\ldots,m-1 \right\}. $$
+    For simplicity, we denote the sum in the above formula by $S(x,y)$.
+    We first prove that $d$ is a metric on $X$.
+    By the symmetric property of $U_n$, we know that $f$ and $d$ are symmetric.
+    It's obvious that $d(x,y)=0$ is equivalent to $x=y$.
+    For any $x,y,z \in X$, we have
+    \begin{align}
+        d(x,y) & = \inf S(x,y) \nonumber \\
+        & \leq \inf(S(x,z)+S(z,y)) \nonumber \\
+        & = d(x,z) + d(z,y). \nonumber
+    \end{align}
+    Thus $d$ is a metric on $X$.
+    Then we prove that the metric $d$ induces the uniform structure~$\mathcal{U}$.
+    Define 
+    $$ V_r = \{(x,y) \in X \times X: d(x,y) < r\}, \quad \text{for any } r > 0. $$
+    We only need to prove that 
+    $$ V_{\sfrac{1}{2^{n+1}}} \subset U_n \subset V_{\sfrac{1}{2^{n-1}}} \text{ for all } n \in \NN. $$
+    By the definition of $d$, it's straightforward to see that
+    $ U_n \subset V_{\sfrac{1}{2^{n-1}}}. $
+    Then we prove that $f(x,y) \leq 2d(x,y)$.
+    We fix a finite sequence $\{x_i\}_{i=0}^m$ with $x_0=x$ and $x_m=y$ 
+    and let~$a = \sum_{i=1}^m f(x_{i-1},x_i)$. 
+    We are going to show that $f(x,y) \leq 2a$ by induction on $n$.
+    We choose $m \in \NN$ such that $2^{-m} \leq a < 2^{-m+1}$.
+    There exists the largest integer $k$ such that $\sum_{i=1}^{k-1} f(x_{i-1},x_i) \leq \frac{a}{2}$.
+    Thus we know 
+    $$\sum_{i=k+1}^m f(x_{i-1},x_i) = a-\sum_{i=1}^{k} f(x_{i-1},x_i) < \frac{a}{2}.$$
+    By the induction hypothesis, we have 
+    $$ f(x,x_{k-1}) \leq 2\sum_{i=1}^{k-1} f(x_{i-1},x_i) \leq a, $$
+    and
+    $$ f(x_{k},y) \leq 2\sum_{i=k+1}^{m} f(x_{i-1},x_i) < a. $$
+    It's trivial that $f(x_{k-1},x_k) \leq a$.
+    Thus $(x,y) \in U_m \circ U_m \circ U_m \subset U_{m-1}$, which
+    implies that~$f(x,y) \leq 2^{-m+1} < 2a$.
+\end{proof}
+Theorem~\eqref{thm2.2} shows that a uniform space $(X,\mathcal{U})$ cannot be metrizable in general.
+However, we can use a function similar to a metric to describe the closeness between two points in $X$.
+This leads to the following definition of pseudometric.
+\begin{definition}~\label{def2.2}
+    Let $X$ be a nonempty set. A function $d:X \times X \rightarrow \RR_+$ is called a \textbf{pseudometric} on $X$ if it satisfies the following conditions:
+    \begin{enumerate}
+        \item For any $x \in X$, $d(x,x)=0$;
+        \item For any $x,y \in X$, $d(x,y)=d(y,x)$;
+        \item For any $x,y,z \in X$, $d(x,z) \leq d(x,y) + d(y,z)$.
+    \end{enumerate}
+    The pair $(X,d)$ is called a \textbf{pseudometric space}.
+\end{definition}
+It's possible that $\mathcal{U}$ can be induced by a family of pseudometrics.
+\begin{theorem} \label{thm2.3}
+    Suppose that $(X,\mathcal{U})$ is a uniform space.
+    Let $P$ be the set of all uniformly continous pseudometrics on $X$.
+    Then the uniform structure $\mathcal{U}$ is induced by the family $P$.
+    Moreover, $P$ is the largest family of pseudometrics on $X$ inducing the uniform structure~$\mathcal{U}$.
+\end{theorem}
+We call the family $P$ mentioned in Theorem~\eqref{thm2.3} a \textbf{gage}.
+
+\begin{proof}
+    Since $d=0$ is an element of $P$, $P$ is nonempty.
+    We write $\mathcal{U}_P$ for the uniform structure induced by $P$
+    and will prove that $\mathcal{U}=\mathcal{U}_P$.
+    For any $d \in P$ and $r > 0$, define
+    $$ V_{d,r} = \{(x,y) \in X \times X: d(x,y) < r\}. $$
+    By the uniform continuity of $d$, we have $V_{d,r} \in \mathcal{U}$.
+    In addition, we know that $\mathcal{U_P}$ is the filter generated by the set
+    $$ \mathcal{A}=\{V_{d,r}: d \in P, r > 0\}. $$
+    Thus we have $\mathcal{U}_P \subset \mathcal{U}$.
+    To prove the converse inclusion, we only need to prove~$\mathcal{A} \vdash \mathcal{U}$.
+    For any $U \in \mathcal{U}$, choose $U_1=U \cap U^{-1}$. 
+    There exists a sequence $\{U_n\}$ such that $U_n$ is symmetric and
+    $$ U_{n} \circ U_{n} \circ U_{n} \subset U_{n-1}, \quad n \geq 2, $$
+    where we set $U_0 = X \times X$.
+    The same as the proof of Theorem~\eqref{thm2.2}, there exists a pseudometric $d$ on $X$ such that
+    $$ V_{d,\sfrac{1}{2^{n+1}}} \subset U_n \subset V_{d,\sfrac{1}{2^{n-1}}} \text{ for all } n \in \NN. $$
+    This also implies that $d$ is uniformly continuous.
+    Thus $d \in P$ and $ \mathcal{A} \vdash U $.
+\end{proof}
+An interesting question is that, given a topological space $(X,\tau)$,
+does there exist a uniform structure $\mathcal{U}$ on $X$ such that $\tau$ is the uniform topology induced by $\mathcal{U}$?
+We can answer the question by using Theorem~\eqref{thm2.3}.
+\begin{corollary} \label{cor2.4}
+    Let $(X,\tau)$ be a topological space.
+    Then there exists a uniform structure $\mathcal{U}$ on $X$ such that $\tau$ is the uniform topology induced by $\mathcal{U}$ if and only if $(X,\tau)$ is completely regular.   
+\end{corollary}
+\begin{proof}
+
+\end{proof}
 
 %%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
 %% References
