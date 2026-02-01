@@ -645,6 +645,28 @@ We can answer the question by using Theorem~\eqref{thm2.3}.
     Then there exists a uniform structure $\mathcal{U}$ on $X$ such that $\tau$ is the uniform topology induced by $\mathcal{U}$ if and only if $(X,\tau)$ is completely regular.   
 \end{corollary}
 \begin{proof}
+\begin{enumerate}
+    \item Suppose that $\tau$ is induced by a uniform structure $\mathcal{U}$
+        and $P$ is the gage of $(X,\mathcal{U})$.
+        Fixing $x \in X$ and $d \in P$, define $f_{d,x}(y) = d(x,y)$ for all $y \in X$.
+        Then $f_{d,x}$ is continuous on $X$ and 
+        $$ V_{d,r}= \{(y \in X: f_{d,x}(y) < r)\}. $$
+        The family $\{V_{d,r}\}$ forms a base of topology $\tau$, which implies that $(X,\tau)$ is completely regular.
+    \item Suppose that $(X,\tau)$ is completely regular.
+        There exists a topological embedding $F$ from $(X,\tau)$ into a product space
+        $ Y = \prod_{\alpha \in I} [0,1]_\alpha $,
+        where $I$ is a nonempty index set.
+        Then $FX$ is a uniform space. We denote its uniform structure by $\mathcal{V}$.
+        Thus $\mathcal{U}=F^{-1}(\mathcal{V})$ is a uniform structure on $X$ and 
+        \[
+        F: (X,\mathcal{U}) \rightarrow (FX,\mathcal{V})
+        \]
+        is a uniform isomorphism.
+        We denote by $\tau'$ the uniform topology induced by $\mathcal{U}$.
+        Then $F:(X,\tau') \rightarrow (FX,\tau'')$ is a homeomorphism,
+        where $\tau''$ is the uniform topology induced by $\mathcal{V}$.
+        Thus $\tau=\tau'$, which means that $\tau$ is a uniform topology.
+\end{enumerate}
 
 \end{proof}
 
