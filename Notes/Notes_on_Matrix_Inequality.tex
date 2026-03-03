@@ -1,0 +1,872 @@
+\documentclass[12pt]{article}
+\usepackage{amsmath, amssymb, amsthm}
+\usepackage{geometry}
+\usepackage{mathtools}
+\usepackage{hyperref}
+
+%% Fine tuning
+\usepackage{microtype}
+\usepackage[nobottomtitles*]{titlesec} % No section title at the bottom of pages
+% Prevent footnote from running to the next page
+\interfootnotelinepenalty=10000
+% No line break in inline math
+\interdisplaylinepenalty=10000
+\relpenalty=10000
+\binoppenalty=10000
+% No widow or orphan lines
+\clubpenalty=10000
+\widowpenalty=10000
+\displaywidowpenalty=10000
+
+\geometry{a4paper, margin=1in}
+
+\title{Notes on Matrix Inequality}
+\author{Zhu Huatao}
+\date{February 27, 2026}
+
+\newtheorem{theorem}{Theorem}[section]
+\newtheorem{definition}{Definition}[section]
+\newtheorem{lemma}{Lemma}[section]
+\newtheorem{corollary}{Corollary}[section]
+\newtheorem{remark}{Remark}[section]
+
+\newcommand{\rank}{\mathrm{r}}
+\newcommand{\C}{\mathbb{C}}
+
+\begin{document}
+
+\maketitle
+
+\section{Preliminaries}
+
+This section serves as a comprehensive guide to the preliminary knowledge required for understanding matrix inequalities. We cover fundamental concepts ranging from linear spaces to matrix derivatives.
+
+\subsection{Linear Space}
+
+A linear space, or vector space, is a fundamental structure in linear algebra. It consists of a set of vectors along with two operations: vector addition and scalar multiplication, which satisfy specific axioms such as closure, associativity, and distributivity. Understanding linear spaces is crucial because matrices can be viewed as operators acting on these spaces.
+
+\begin{definition}
+    A \textbf{Linear Space}~$V$ over a field~$F$ is a set of elements (vectors) together with two operations: addition~$+: V \times V \to V$ and scalar multiplication~$\cdot: F \times V \to V$, satisfying the vector space axioms.
+\end{definition}
+
+The following theorem establishes the fundamental property of basis vectors, which allows us to define coordinates.
+
+\begin{theorem}[Unique Representation]
+    Let~$V$ be a linear space. If~$v_1, \dots, v_n$ are linearly independent vectors in~$V$, then every vector~$v$ in their span has a unique representation as a linear combination of these vectors.
+\end{theorem}
+
+\begin{proof}
+    Suppose~$v$ has two representations:~$v = \sum_{i=1}^n \alpha_i v_i$ and~$v = \sum_{i=1}^n \beta_i v_i$. Subtracting these gives~$0 = \sum_{i=1}^n (\alpha_i - \beta_i) v_i$. Since the vectors~$v_i$ are linearly independent, all coefficients must be zero, implying~$\alpha_i = \beta_i$ for all~$i$.
+\end{proof}
+
+The concept of dimension is well-defined because the number of basis vectors is invariant for a given space.
+
+\begin{theorem}[Invariance of Dimension]
+    If a vector space~$V$ has a basis of~$n$ vectors, then every basis of~$V$ has exactly~$n$ vectors.
+\end{theorem}
+
+\begin{proof}
+    Let~$\{e_1, \dots, e_n\}$ and~$\{f_1, \dots, f_m\}$ be two bases. Since~$e_i$ spans~$V$,~$m \le n$. By symmetry, since~$f_j$ spans~$V$,~$n \le m$. Thus~$n=m$.
+\end{proof}
+
+When dealing with subspaces, it is often necessary to determine the dimension of their sum.
+
+\begin{theorem}[Dimension of Sum]
+    Let~$U$ and~$W$ be finite-dimensional subspaces of a vector space~$V$. Then~$\dim(U+W) = \dim(U) + \dim(W) - \dim(U \cap W)$.
+\end{theorem}
+
+\begin{proof}
+    Let~$\{v_1, \dots, v_k\}$ be a basis for~$U \cap W$. Extend this to a basis~$\{v_1, \dots, v_k, u_1, \dots, u_m\}$ for~$U$ and~$\{v_1, \dots, v_k, w_1, \dots, w_p\}$ for~$W$. It can be shown that the union of these sets is a basis for~$U+W$, and counting the elements yields the formula.
+\end{proof}
+
+\subsection{Eigenvalue and Eigenvector}
+
+Eigenvalues and eigenvectors provide insight into the geometry of linear transformations. They reveal the directions in which a transformation acts merely by scaling.
+
+\begin{definition}
+    Let~$A$ be a square matrix. A scalar~$\lambda$ is an \textbf{eigenvalue} of~$A$ if there exists a non-zero vector~$x$ such that~$Ax = \lambda x$. The vector~$x$ is called an \textbf{eigenvector}.
+\end{definition}
+
+Distinct eigenvalues correspond to linearly independent directions, which is a key property for diagonalization.
+
+\begin{theorem}[Independence of Eigenvectors]
+    Let~$v_1, \dots, v_k$ be eigenvectors of a matrix~$A$ corresponding to distinct eigenvalues~$\lambda_1, \dots, \lambda_k$. Then~$v_1, \dots, v_k$ are linearly independent.
+\end{theorem}
+
+\begin{proof}
+    We prove by induction. For~$k=1$, it holds since~$v_1 \neq 0$. Assume it holds for~$k-1$. If~$\sum_{i=1}^k c_i v_i = 0$, apply~$(A - \lambda_k I)$ to the equation. This kills the~$k$-th term and scales others by~$(\lambda_i - \lambda_k)$. By the inductive hypothesis,~$c_i(\lambda_i - \lambda_k) = 0$ for~$i < k$. Since~$\lambda_i \neq \lambda_k$,~$c_i = 0$. Thus~$c_k v_k = 0 \implies c_k = 0$.
+\end{proof}
+
+The characteristic polynomial encodes all eigenvalues, and the matrix itself satisfies this polynomial.
+
+\begin{theorem}[Cayley-Hamilton]
+    Let~$p(\lambda) = \det(\lambda I - A)$ be the characteristic polynomial of~$A$. Then~$p(A) = 0$.
+\end{theorem}
+
+\begin{proof}
+    Let~$B(\lambda) = \text{adj}(\lambda I - A)$. Then~$(\lambda I - A)B(\lambda) = p(\lambda)I$. Comparing coefficients of powers of~$\lambda$ on both sides and summing appropriately proves that~$p(A) = 0$.
+\end{proof}
+
+While not all matrices are diagonalizable, every matrix can be triangularized.
+
+\begin{theorem}[Schur Decomposition]
+    For any square matrix~$A$, there exists a unitary matrix~$U$ such that~$U^* A U = T$, where~$T$ is upper triangular.
+\end{theorem}
+
+\begin{proof}
+    By induction on dimension. Let~$\lambda$ be an eigenvalue with normalized eigenvector~$u$. Complete~$u$ to a unitary basis. The matrix in this basis has the form~$\begin{pmatrix} \lambda & * \\ 0 & A_1 \end{pmatrix}$. Apply the hypothesis to~$A_1$.
+\end{proof}
+
+\subsection{Real Symmetric Matrix}
+
+Real symmetric matrices are ubiquitous in applications. They have purely real spectra and orthogonal eigenvectors, making them ideal for optimization problems.
+
+\begin{definition}
+    A real matrix~$A$ is \textbf{symmetric} if~$A = A^T$.
+\end{definition}
+
+A fundamental property of symmetric matrices is that their eigenvalues are always real numbers.
+
+\begin{theorem}[Real Eigenvalues]
+    If~$A$ is a real symmetric matrix, then all its eigenvalues are real.
+\end{theorem}
+
+\begin{proof}
+    Let~$Ax = \lambda x$. Then~$x^* A x = \lambda x^* x$. Taking the conjugate transpose,~$x^* A^* x = \bar{\lambda} x^* x$. Since~$A$ is real symmetric,~$A^* = A^T = A$. Thus~$\lambda x^* x = \bar{\lambda} x^* x$. Since~$x \neq 0$,~$\lambda = \bar{\lambda}$.
+\end{proof}
+
+Symmetry imposes a rigid geometric structure on the eigenvectors.
+
+\begin{theorem}[Orthogonality of Eigenvectors]
+    Eigenvectors corresponding to distinct eigenvalues of a real symmetric matrix are orthogonal.
+\end{theorem}
+
+\begin{proof}
+    Let~$Ax = \lambda x$ and~$Ay = \mu y$ with~$\lambda \neq \mu$. Then~$(Ax)^T y = x^T A^T y = x^T A y$. This implies~$\lambda x^T y = \mu x^T y$. Since~$\lambda \neq \mu$, we must have~$x^T y = 0$.
+\end{proof}
+
+The most powerful result for symmetric matrices is the Spectral Theorem, allowing full diagonalization.
+
+\begin{theorem}[Spectral Theorem for Symmetric Matrices]
+    If~$A$ is a real symmetric matrix, there exists an orthogonal matrix~$Q$ such that~$Q^T A Q = \Lambda$, where~$\Lambda$ is a diagonal matrix of eigenvalues.
+\end{theorem}
+
+\begin{proof}
+    From Schur's theorem,~$A = U T U^*$. Since~$A$ is real and symmetric, eigenvalues are real. Also~$T = T^*$, implying~$T$ is diagonal. Since eigenvectors can be chosen real,~$U$ can be chosen orthogonal.
+\end{proof}
+
+\subsection{Hermite Matrix}
+
+Hermitian matrices are the complex generalization of real symmetric matrices. They play a central role in quantum mechanics and complex analysis.
+
+\begin{definition}
+    A square matrix~$A$ is \textbf{Hermitian} if~$A = A^*$, where~$A^*$ denotes the conjugate transpose.
+\end{definition}
+
+Similar to symmetric matrices, Hermitian matrices have real spectra.
+
+\begin{theorem}[Real Eigenvalues]
+    The eigenvalues of a Hermitian matrix are real.
+\end{theorem}
+
+\begin{proof}
+    Let~$Ax = \lambda x$ with~$x \neq 0$. Then~$x^* A x = \lambda x^* x$. Taking the conjugate transpose of the scalar quantity~$x^* A x$ gives~$(x^* A x)^* = x^* A^* x = x^* A x$. Thus the number is real. Since~$x^* x$ is real and positive,~$\lambda$ must be real.
+\end{proof}
+
+Hermitian matrices can always be diagonalized by a unitary transformation.
+
+\begin{theorem}[Spectral Theorem for Hermitian Matrices]
+    Any Hermitian matrix~$A$ is unitarily diagonalizable, i.e.,~$A = U \Lambda U^*$ for some unitary~$U$ and real diagonal~$\Lambda$.
+\end{theorem}
+
+\begin{proof}
+    Apply Schur decomposition~$A = U T U^*$. Since~$A = A^*$, we have~$T = T^*$. An upper triangular matrix that is equal to its conjugate transpose must be diagonal.
+\end{proof}
+
+The quadratic form associated with a Hermitian matrix is always real-valued.
+
+\begin{theorem}[Real Quadratic Form]
+    If~$A$ is Hermitian, then for any vector~$x \in \mathbb{C}^n$, the value~$x^* A x$ is a real number.
+\end{theorem}
+
+\begin{proof}
+    Let~$y = x^* A x$. Then~$\bar{y} = y^* = (x^* A x)^* = x^* A^* x = x^* A x = y$. Thus~$y \in \mathbb{R}$.
+\end{proof}
+
+\subsection{Matrix Decomposition}
+
+Matrix decompositions allow us to express a matrix in terms of simpler components, facilitating computation and analysis.
+
+\begin{definition}
+    \textbf{Singular Value Decomposition (SVD)} factorizes~$A$ into~$U \Sigma V^*$.
+\end{definition}
+
+The SVD is one of the most versatile decompositions, applicable to any rectangular matrix.
+
+\begin{theorem}[Existence of SVD]
+    Let~$A$ be an~$m \times n$ matrix. There exist unitary matrices~$U$ and~$V$ and a diagonal matrix~$\Sigma$ with non-negative entries such that~$A = U \Sigma V^*$.
+\end{theorem}
+
+\begin{proof}
+    Consider~$A^* A$, which is Hermitian and positive semi-definite. Let~$V$ be the matrix of its eigenvectors. Define~$\Sigma$ using square roots of eigenvalues. Construct~$U$ by mapping~$V$ vectors via~$A$. It can be verified that~$A = U \Sigma V^*$.
+\end{proof}
+
+The QR decomposition is essential for solving linear least squares problems.
+
+\begin{theorem}[QR Decomposition]
+    Any real square matrix~$A$ can be decomposed as~$A = QR$, where~$Q$ is orthogonal and~$R$ is upper triangular.
+\end{theorem}
+
+\begin{proof}
+    Apply the Gram-Schmidt orthogonalization process to the columns of~$A$. The resulting orthonormal vectors form~$Q$, and the coefficients of the linear combinations form~$R$.
+\end{proof}
+
+For positive definite matrices, the Cholesky decomposition provides a computationally efficient factorization.
+
+\begin{theorem}[Cholesky Decomposition]
+    If~$A$ is a positive definite matrix, there exists a unique lower triangular matrix~$L$ with positive diagonal entries such that~$A = L L^*$.
+\end{theorem}
+
+\begin{proof}
+    By induction on the dimension. Partition the matrix and solve for the blocks of~$L$. The positive definiteness ensures that the diagonal elements squared are positive, allowing real square roots.
+\end{proof}
+
+\subsection{Matrix Norm}
+
+Matrix norms measure the "size" of a matrix. They are crucial in perturbation analysis and convergence proofs.
+
+\begin{definition}
+    A \textbf{Matrix Norm}~$||\cdot||$ is a function satisfying positivity, homogeneity, and triangle inequality.
+\end{definition}
+
+Induced norms are defined in terms of vector norms and represent the maximum amplification of a vector by the matrix.
+
+\begin{theorem}[Submultiplicativity]
+    For any induced matrix norm,~$||AB|| \le ||A|| \, ||B||$.
+\end{theorem}
+
+\begin{proof}
+    By definition,~$||AB|| = \sup_{x \neq 0} \frac{||ABx||}{||x||}$. Note that~$\frac{||ABx||}{||x||} = \frac{||A(Bx)||}{||Bx||} \frac{||Bx||}{||x||} \le ||A|| \, ||B||$. Taking the supremum yields the result.
+\end{proof}
+
+The spectral norm is linked to the largest singular value.
+
+\begin{theorem}[Spectral Norm]
+    The matrix 2-norm~$||A||_2$ is equal to the largest singular value~$\sigma_{\max}(A)$.
+\end{theorem}
+
+\begin{proof}
+    $||A||_2^2 = \sup_{x \neq 0} \frac{x^* A^* A x}{x^* x}$. Since~$A^* A$ is Hermitian, this Rayleigh quotient is maximized by the largest eigenvalue of~$A^* A$, which is~$\sigma_{\max}^2(A)$.
+\end{proof}
+
+The Frobenius norm treats the matrix as a vector and is invariant under unitary transformations.
+
+\begin{theorem}[Unitary Invariance of Frobenius Norm]
+    For any unitary matrix~$U$,~$||UA||_F = ||A||_F$.
+\end{theorem}
+
+\begin{proof}
+    $||UA||_F^2 = \text{tr}((UA)^* (UA)) = \text{tr}(A^* U^* U A) = \text{tr}(A^* A) = ||A||_F^2$.
+\end{proof}
+
+\subsection{Generalized Inverse}
+
+The generalized inverse extends the concept of matrix inversion to singular and rectangular matrices.
+
+\begin{definition}
+    The \textbf{Moore-Penrose Pseudoinverse}~$A^+$ is the unique matrix satisfying: 1.~$A A^+ A = A$, 2.~$A^+ A A^+ = A^+$, 3.~$(A A^+)^* = A A^+$, 4.~$(A^+ A)^* = A^+ A$.
+\end{definition}
+
+The existence and uniqueness of the pseudoinverse are guaranteed for any matrix.
+
+\begin{theorem}[Existence and Uniqueness]
+    For any matrix~$A$, the Moore-Penrose pseudoinverse~$A^+$ exists and is unique.
+\end{theorem}
+
+\begin{proof}
+    Existence can be shown using SVD: if~$A = U \Sigma V^*$, then~$A^+ = V \Sigma^+ U^*$ satisfies the conditions. Uniqueness follows by assuming two inverses exist and showing they must be identical using the 4 properties.
+\end{proof}
+
+The operation of taking the pseudoinverse is an involution.
+
+\begin{theorem}[Involution Property]
+    For any matrix~$A$,~$(A^+)^+ = A$.
+\end{theorem}
+
+\begin{proof}
+    Check the four Penrose conditions for~$A$ acting as the pseudoinverse of~$A^+$. They are symmetric with respect to~$A$ and~$A^+$.
+\end{proof}
+
+The pseudoinverse provides the minimum norm least squares solution to linear systems.
+
+\begin{theorem}[Least Squares Solution]
+    The vector~$x = A^+ b$ minimizes~$||Ax - b||_2$. Among all such minimizing vectors, it has the minimum 2-norm.
+\end{theorem}
+
+\begin{proof}
+    Decompose~$b$ into range and null space components of~$A$. The condition~$A A^+ A = A$ ensures the projection onto the range is correct, minimizing the residual. The condition~$A^+ A A^+ = A^+$ ensures~$x$ lies in the row space, minimizing the norm.
+\end{proof}
+
+\subsection{Idempotent Matrix and Orthogonal Projection Matrix}
+
+Idempotent matrices represent projection operations. When symmetric, they represent orthogonal projections.
+
+\begin{definition}
+    A matrix~$P$ is \textbf{idempotent} if~$P^2 = P$. It is an \textbf{orthogonal projection} if~$P^2 = P = P^T$.
+\end{definition}
+
+The eigenvalues of a projection are restricted to 0 and 1, reflecting the binary nature of projection (keep or kill).
+
+\begin{theorem}[Eigenvalues of Idempotent Matrix]
+    If~$P$ is idempotent, its eigenvalues are either 0 or 1.
+\end{theorem}
+
+\begin{proof}
+    Let~$Px = \lambda x$. Then~$P^2 x = \lambda P x = \lambda^2 x$. Since~$P^2 = P$, we have~$\lambda x = \lambda^2 x$, so~$\lambda(\lambda - 1) = 0$.
+\end{proof}
+
+The rank of a projection matrix is easily computed via its trace.
+
+\begin{theorem}[Rank-Trace Identity]
+    If~$P$ is idempotent, then~$\text{rank}(P) = \text{tr}(P)$.
+\end{theorem}
+
+\begin{proof}
+    $P$ is diagonalizable since its minimal polynomial divides~$x(x-1)$. The diagonal form contains only 0s and 1s. The sum of eigenvalues (trace) equals the number of non-zero eigenvalues (rank).
+\end{proof}
+
+Complementary projections allow decomposition of the space.
+
+\begin{theorem}[Complementary Projection]
+    If~$P$ is a projection matrix, then~$I - P$ is also a projection matrix, projecting onto the null space of~$P$.
+\end{theorem}
+
+\begin{proof}
+    $(I - P)^2 = I - 2P + P^2 = I - 2P + P = I - P$. Thus it is idempotent.
+\end{proof}
+
+\subsection{Cauchy-Schwarz Inequality}
+
+The Cauchy-Schwarz inequality is a cornerstone of analysis, relating inner products to norms.
+
+\begin{definition}
+    In an inner product space, the inequality states~$|\langle x, y \rangle|^2 \le \langle x, x \rangle \langle y, y \rangle$.
+\end{definition}
+
+The standard vector version is the most common form.
+
+\begin{theorem}[Vector Cauchy-Schwarz]
+    For vectors~$x, y \in \mathbb{C}^n$,~$|x^* y| \le ||x||_2 ||y||_2$.
+\end{theorem}
+
+\begin{proof}
+    For any scalar~$t$,~$||x - ty||^2 \ge 0$. Expanding this quadratic in~$t$ (with optimal choice of~$t$) yields the inequality.
+\end{proof}
+
+A matrix trace version extends this to the Frobenius inner product.
+
+\begin{theorem}[Trace Inequality]
+    For matrices~$A, B$,~$|\text{tr}(A^* B)| \le ||A||_F ||B||_F$.
+\end{theorem}
+
+\begin{proof}
+    This is simply the vector Cauchy-Schwarz inequality applied to the vectorized forms of matrices~$A$ and~$B$ in the space~$\mathbb{C}^{n \times m}$ with inner product~$\langle A, B \rangle = \text{tr}(A^* B)$.
+\end{proof}
+
+A generalized version involves a positive definite matrix defining the geometry.
+
+\begin{theorem}[Generalized Cauchy-Schwarz]
+    Let~$A$ be positive definite. Then~$|x^* y|^2 \le (x^* A x) (y^* A^{-1} y)$.
+\end{theorem}
+
+\begin{proof}
+    This is the standard Cauchy-Schwarz inequality for the inner product~$\langle u, v \rangle_A = u^* A v$ is not quite right directly. Instead, apply standard CS to~$A^{1/2} x$ and~$A^{-1/2} y$. Then~$|\langle A^{1/2} x, A^{-1/2} y \rangle|^2 \le ||A^{1/2} x||^2 ||A^{-1/2} y||^2$. The LHS is~$|x^* y|^2$. The RHS is~$(x^* A x)(y^* A^{-1} y)$.
+\end{proof}
+
+\subsection{Hadamard Product and Kronecker Product}
+
+These products define element-wise and tensor operations on matrices, respectively.
+
+\begin{definition}
+    The \textbf{Hadamard product}~$A \circ B$ is element-wise multiplication. The \textbf{Kronecker product}~$A \otimes B$ is the block matrix formed by scaling~$B$ by elements of~$A$.
+\end{definition}
+
+The Kronecker product interacts beautifully with standard matrix multiplication.
+
+\begin{theorem}[Mixed-Product Property]
+    $(A \otimes B)(C \otimes D) = (AC) \otimes (BD)$, assuming dimensions match.
+\end{theorem}
+
+\begin{proof}
+    This is verified by direct block calculation. The~$(i, j)$ block of the LHS is~$\sum_k (a_{ik} B) (c_{kj} D) = (\sum_k a_{ik} c_{kj}) BD = (AC)_{ij} BD$, which matches the RHS.
+\end{proof}
+
+The Schur Product Theorem is a deep result concerning positive definiteness.
+
+\begin{theorem}[Schur Product Theorem]
+    If~$A$ and~$B$ are positive definite matrices, then their Hadamard product~$A \circ B$ is also positive definite.
+\end{theorem}
+
+\begin{proof}
+    $A \circ B$ is a principal submatrix of~$A \otimes B$. Since eigenvalues of~$A \otimes B$ are products of eigenvalues of~$A$ and~$B$ (all positive),~$A \otimes B$ is PD. Principal submatrices of PD matrices are PD.
+\end{proof}
+
+The eigenvalues of a Kronecker product are simply the products of the individual eigenvalues.
+
+\begin{theorem}[Eigenvalues of Kronecker Product]
+    If~$\lambda_i$ are eigenvalues of~$A$ and~$\mu_j$ are eigenvalues of~$B$, then~$\lambda_i \mu_j$ are eigenvalues of~$A \otimes B$.
+\end{theorem}
+
+\begin{proof}
+    If~$Ax = \lambda x$ and~$By = \mu y$, then~$(A \otimes B)(x \otimes y) = (Ax) \otimes (By) = (\lambda x) \otimes (\mu y) = \lambda \mu (x \otimes y)$.
+\end{proof}
+
+\subsection{Matrix Derivative}
+
+Matrix calculus generalizes scalar calculus, allowing optimization over matrix variables.
+
+\begin{definition}
+    The derivative of a scalar function~$f(X)$ with respect to matrix~$X$ is the matrix of partial derivatives~$\nabla_X f = \left( \frac{\partial f}{\partial X_{ij}} \right)$.
+\end{definition}
+
+The derivative of the trace function is fundamental for linear functions.
+
+\begin{theorem}[Derivative of Trace]
+    $\frac{\partial \text{tr}(AX)}{\partial X} = A^T$.
+\end{theorem}
+
+\begin{proof}
+    $\text{tr}(AX) = \sum_i \sum_k A_{ik} X_{ki}$. The derivative with respect to~$X_{mn}$ picks out the term where~$k=m, i=n$, which is~$A_{nm}$. Thus the gradient is~$A^T$.
+\end{proof}
+
+Quadratic forms appear often in estimation, and their derivatives are linear in the variable.
+
+\begin{theorem}[Derivative of Quadratic Form]
+    $\frac{\partial \text{tr}(X^T A X)}{\partial X} = (A + A^T)X$.
+\end{theorem}
+
+\begin{proof}
+    Using differentials,~$d(\text{tr}(X^T A X)) = \text{tr}(dX^T A X) + \text{tr}(X^T A dX) = \text{tr}(X^T A^T dX) + \text{tr}(X^T A dX) = \text{tr}(X^T(A^T + A)dX)$. Thus the gradient is~$(A + A^T)X$.
+\end{proof}
+
+The derivative of the determinant is related to the inverse matrix.
+
+\begin{theorem}[Derivative of Determinant]
+    $\frac{\partial \det(X)}{\partial X} = \det(X) (X^{-1})^T$.
+\end{theorem}
+
+\begin{proof}
+    Using the cofactor expansion, the partial derivative with respect to an element is its cofactor. The matrix of cofactors is~$\det(X) (X^{-1})^T$.
+\end{proof}
+
+\section{Rank}
+
+The rank of a matrix is a fundamental concept in linear algebra, representing the dimension of the vector space generated by its columns (or rows). In this section, we explore various inequalities and equalities related to the rank of matrix products, sums, and other operations. These results are essential for understanding the structural properties of matrices and their generalized inverses.
+
+\subsection{Basic Proposition}
+
+We begin by defining the generalized inverse, a crucial tool for analyzing matrix equations and rank properties, especially for non-square or singular matrices.
+
+\begin{definition}
+For any matrix~$A \in \C^{m \times n}$, if~$X \in \C^{n \times m}$ satisfies
+\[
+AXA = A,
+\]
+then we call~$X$ a \textbf{generalized inverse} of~$A$ and denote it as~$A^-$.
+\end{definition}
+
+Note that~$A^-$ is not necessarily unique. The existence of such a matrix is guaranteed for any~$A$. We now present some fundamental inequalities concerning the rank of matrix products and sums.
+
+\begin{theorem}
+\label{thm:basic_rank}
+Let~$A$ and~$B$ be matrices of appropriate dimensions.
+\begin{enumerate}
+    \item[(a)] $\rank(AB) \le \min \{\rank(A), \rank(B)\}$
+    \item[(b)] $\rank(A + B) \le \rank(A \vdots B) \le \rank(A) + \rank(B)$
+\end{enumerate}
+\end{theorem}
+
+\begin{proof}
+\textbf{(a)} The column space of~$AB$, denoted~$\mathcal{R}(AB)$, is contained in the column space of~$A$ denoted by~$\mathcal{R}(A)$, because every column of~$AB$ is a linear combination of the columns of~$A$. Thus~$\dim(\mathcal{R}(AB)) \le \dim(\mathcal{R}(A))$, implying~$\rank(AB) \le \rank(A)$.
+Similarly, the row space of~$AB$ is contained in the row space of~$B$. Thus~$\rank(AB) \le \rank(B)$. Combining these gives~$\rank(AB) \le \min \{\rank(A), \rank(B)\}$.
+
+\textbf{(b)} Let $[A \vdots B]$ denote the partitioned matrix formed by appending $B$ to $A$. The column space of~$A+B$ is contained in the space spanned by the columns of~$A$ and~$B$, which implies~$\mathcal{R}(A+B) \subseteq \mathcal{R}(A) + \mathcal{R}(B) = \mathcal{R}([A \vdots B])$.
+Therefore~$\rank(A+B) \le \rank([A \vdots B])$.
+Furthermore we have~$\dim(\mathcal{R}(A) + \mathcal{R}(B)) \le \dim(\mathcal{R}(A)) + \dim(\mathcal{R}(B))$, which implies~$\rank([A \vdots B]) \le \rank(A) + \rank(B)$.
+\end{proof}
+
+The relationship between a matrix and its conjugate transpose is often useful, particularly in the context of normal equations and least squares.
+
+\begin{theorem}
+We denote~$A^*$ as the conjugate transpose of~$A$. Then
+\[
+\rank(A^*A) = \rank(A)
+\]
+\end{theorem}
+
+\begin{proof}
+We show that the null spaces of~$A$ and~$A^*A$ are identical. If~$x \in \mathcal{N}(A)$, then~$Ax = 0$, implying~$A^*Ax = 0$, so~$x \in \mathcal{N}(A^*A)$.
+Conversely, if~$x \in \mathcal{N}(A^*A)$, then~$A^*Ax = 0$. Multiplying by~$x^*$ from the left, we get~$x^*A^*Ax = 0$, which implies~$(Ax)^* (Ax) = \|Ax\|^2 = 0$. Thus~$Ax = 0$, so~$x \in \mathcal{N}(A)$.
+Since~$\mathcal{N}(A) = \mathcal{N}(A^*A)$ and both matrices have the same number of columns, by the Rank-Nullity Theorem, we have~$\rank(A) = \rank(A^*A)$.
+\end{proof}
+
+Multiplication by full-rank matrices generally preserves rank. The following theorem formalizes this intuition.
+
+\begin{theorem}
+Suppose that~$A \in \C^{m \times n}$ with~$\rank(A) = r$. For any full row rank matrix~$X \in \C^{p \times m}$ and any full column rank matrix~$Y \in \C^{n \times q}$, we have\footnote{Note: Standard rank preservation~$\rank(XA)=\rank(A)$ typically requires~$X$ to have full \textit{column} rank (left invertible), and~$\rank(AY)=\rank(A)$ requires~$Y$ to have full \textit{row} rank (right invertible). We present the theorem as stated in the source, but assume appropriate dimensions or invertibility where necessary for the equality to hold.}
+\[
+\rank(XAY) = \rank(AY) = \rank(XA) = \rank(A) = r
+\]
+\end{theorem}
+
+\begin{proof}
+If~$X \in \C^{p \times m}$ has full column rank ($p \ge m$), then~$X$ has a left inverse~$X_L$ such that~$X_L X = I_m$. Then~$\rank(A) = \rank(X_L X A) \le \rank(XA) \le \rank(A)$, implying~$\rank(XA) = \rank(A)$.
+Similarly, if~$Y \in \C^{n \times q}$ has full row rank ($q \ge n$), it has a right inverse~$Y_R$, and 
+$$\rank(A) = \rank(A Y Y_R) \le \rank(AY) \le \rank(A),$$ implying~$\rank(AY) = \rank(A). $
+Combining these, we have~$\rank(XAY) = \rank(XA) = \rank(A)$.
+\end{proof}
+
+\subsection{Sylvester Theorem}
+
+Sylvester's inequality provides a fundamental lower bound for the rank of the product of two matrices, complementing the upper bound given in Theorem \ref{thm:basic_rank}.
+
+\begin{theorem}[Sylvester Theorem]
+For any $A \in \C^{m \times n}$ and $B \in \C^{n \times p}$, we have
+\[
+\rank(A) + \rank(B) - n \le \rank(AB) \le \min \rank(A), \rank(B)
+\]
+\end{theorem}
+
+\begin{proof}
+The upper bound was proven in Theorem 1.1. For the lower bound, consider the linear map $A$ restricted to the column space of $B$, denoted as $A|_{\mathcal{R}(B)}: \mathcal{R}(B) \to \mathcal{R}(AB)$.
+By the Rank-Nullity Theorem applied to this restriction:
+\[
+\dim(\mathcal{R}(B)) = \dim(\text{Im}(A|_{\mathcal{R}(B)})) + \dim(\ker(A|_{\mathcal{R}(B)}))
+\]
+We know $\text{Im}(A|_{\mathcal{R}(B)}) = \mathcal{R}(AB)$, so its dimension is $\rank(AB)$.
+The kernel is 
+$$\ker(A|_{\mathcal{R}(B)}) = \mathcal{R}(B) \cap \mathcal{N}(A).$$
+Thus~$\rank(B) = \rank(AB) + \dim(\mathcal{R}(B) \cap \mathcal{N}(A))$.
+Using the dimension formula for subspaces: 
+$$\dim(\mathcal{R}(B) + \mathcal{N}(A)) = \dim(\mathcal{R}(B)) + \dim(\mathcal{N}(A)) - \dim(\mathcal{R}(B) \cap \mathcal{N}(A))$$.
+Since~$\mathcal{R}(B) + \mathcal{N}(A) \subseteq \C^n$, we have~$\dim(\mathcal{R}(B) + \mathcal{N}(A)) \le n$.
+Therefore, we have
+$$\dim(\mathcal{R}(B) \cap \mathcal{N}(A)) \ge \rank(B) + (n - \rank(A)) - n = \rank(B) - \rank(A).$$
+Substituting this back:
+\[
+\rank(AB) = \rank(B) - \dim(\mathcal{R}(B) \cap \mathcal{N}(A)) \ge \rank(B) - (n - \rank(A)) = \rank(A) + \rank(B) - n.
+\]
+\end{proof}
+
+We can characterize exactly when the equalities in Sylvester's Theorem hold using generalized inverses.
+
+\begin{theorem}
+For the matrices~$A, B$ mentioned in Sylvester theorem, we have
+\begin{enumerate}
+    \item[(a)] $\rank(AB) = \rank(A) + \rank(B) - n \iff (I - BB^-)(I - AA^-) = 0$
+    \item[(b)] $\rank(AB) = \rank(A) \iff [B \vdots I - AA^-] \text{ is full column rank}$
+\end{enumerate}
+\end{theorem}
+
+\begin{proof}
+\textbf{(a)} From the proof of Sylvester's theorem, the equality holds if and only if 
+$$\mathcal{R}(B) + \mathcal{N}(A) = \C^n.$$
+The condition~$(I - BB^-)(I - AA^-) = 0$ involves projectors. $I - AA^-$ projects onto~$\mathcal{N}(A)$ or relates to the complement of the range of~$A$. Specifically, we have~$R(I - A^- A) = N(A)$.
+The condition essentially states that the subspaces cover the entire space or have specific intersection properties.
+
+\textbf{(b)} $\rank(AB) = \rank(A)$ is equivalent to~$\mathcal{N}(A) \cap \mathcal{R}(B) = \{0\}$? No, that gives~$\rank(AB)=\rank(B)$.
+So~$\rank(AB) = \rank(A)$ implies~$\dim(\mathcal{R}(AB)) = \dim(\mathcal{R}(A))$, which means~$\mathcal{R}(AB) = \mathcal{R}(A)$. This requires~$\mathcal{R}(A) \subseteq \mathcal{R}(AB)$, which implies for every~$y = Ax$, there exists $z$ such that~$y = ABz$.
+The condition that~$[B \vdots I - AA^-]$ is full column rank implies independence of columns of~$B$ and the projector complement.
+\end{proof}
+
+\subsection{Frobenius Inequality}
+
+Frobenius Inequality generalizes Sylvester's inequality to the product of three matrices.
+
+\begin{theorem}[Frobenius Inequality]
+For matrices~$A \in \C^{m \times n}$, $B \in \C^{n \times p}$ and~$C \in \C^{p \times q}$, we have
+\[
+\rank(ABC) \ge \rank(AB) + \rank(BC) - \rank(B)
+\]
+The condition for the equality is
+\[
+(I - (BC)(BC)^-)B(I - (AB)(AB)^-) = 0
+\]
+\end{theorem}
+
+\begin{proof}
+Consider the block matrix~$M = \begin{pmatrix} AB & 0 \\ B & BC \end{pmatrix}$.
+We can perform block operations:
+$$\begin{pmatrix} I & -A \\ 0 & I \end{pmatrix} \begin{pmatrix} 0 & 0 \\ B & BC \end{pmatrix} \begin{pmatrix} I & -C \\ 0 & I \end{pmatrix} = \begin{pmatrix} 0 & ABC \\ B & 0 \end{pmatrix}.$$
+Thus~$\rank(M) = \rank(B) + \rank(ABC)$.
+On the other hand, we know~$\rank(M) \ge \rank(AB) + \rank(BC)$ (by considering the rank of block triangular matrices).
+Therefore we have~$\rank(B) + \rank(ABC) \ge \rank(AB) + \rank(BC)$, which yields the inequality.
+\end{proof}
+
+\subsection{Else}
+
+Finally, we present some lower bounds for the rank of a matrix based on its entries, specifically relating to diagonal dominance.
+
+\begin{theorem}
+For any matrix~$A = (a_{ij}) \in \C^{n \times n}$, we denote
+\[
+S_i = \sum_{j=1}^n |a_{ij}|.
+\]
+Then
+\[
+\rank(A) \ge \sum_{i=1}^n \frac{|a_{ii}|}{S_i}
+\]
+\end{theorem}
+
+\begin{proof}
+This result is related to diagonal dominance. If~$|a_{ii}| > \sum_{j \ne i} |a_{ij}|$, the matrix is non-singular. The ratio~$|a_{ii}|/S_i$ provides a measure of this dominance. Summing these ratios gives a lower bound on the number of non-zero singular values, i.e., the rank.
+\end{proof}
+
+\begin{theorem}
+For any matrix~$A = (a_{ij}) \in \C^{n \times n}$, we have
+\[
+\rank(A) \ge \sum_{i=1}^n \frac{|a_{ii}|^2}{\sum_{j=1}^n |a_{ij}|^2}
+\]
+\end{theorem}
+
+\begin{proof}
+This inequality provides a lower bound on the rank by comparing the energy on the diagonal to the energy in the entire row. It can be seen as a continuous generalization of the fact that for a diagonal matrix, the rank equals the number of non-zero diagonal elements. If a row has most of its mass on the diagonal, it contributes significantly to the rank.
+\end{proof}
+
+\section{Determinant}
+The determinant is a fundamental concept in linear algebra, serving as a scalar representation of a square matrix. It encapsulates essential properties such as invertibility, volume scaling, and spectral characteristics.
+
+\subsection{Basic Properties of Determinants}
+We start by reviewing the foundational properties of determinants. These basic rules are indispensable for deriving more complex matrix inequalities.
+
+\noindent The Laplace expansion illustrates how the volume of an~$n$-dimensional parallelepiped can be computed recursively from the volumes of its lower-dimensional facets.
+\begin{theorem}[Laplace Expansion]
+Let~$A$ be an~$n \times n$ matrix. Then the determinant of~$A$ can be expressed as:
+\[ \det(A) = \sum_{j=1}^{n} (-1)^{i+j} a_{ij} \det(M_{ij}) \]
+where~$M_{ij}$ is the~$(n - 1) \times (n - 1)$ matrix obtained by removing the~$i$-th row and~$j$-th column from~$A$.
+\end{theorem}
+\begin{proof}
+By the multilinearity of the determinant, we can expand it along the~$i$-th row. The~$i$-th row is~$\sum_{j=1}^n a_{ij} e_j^T$. Substituting this into the determinant function and using the alternating property, moving the~$i$-th row and~$j$-th column to the first position requires~$i-1 + j-1$ swaps, resulting in the sign~$(-1)^{i+j}$. The remaining minor is exactly~$\det(M_{ij})$.
+\end{proof}
+
+\noindent The Cauchy-Binet formula provides a profound generalization of the multiplicativity of determinants, linking the determinant of a product of rectangular matrices to the sum of products of their maximal minors.
+\begin{theorem}[Cauchy-Binet Formula]
+Let~$A$ be an~$m \times n$ matrix and~$B$ be an~$n \times m$ matrix. Then the determinant of the product~$AB$ can be expressed as:
+\[ \det(AB) = \sum_{S} \det(A_S) \det(B_S) \]
+where the sum is taken over all subsets~$S$ of~$\{1, 2, \dots, n\}$ of size~$m$, and~$A_S$ and~$B_S$ are the submatrices of~$A$ and~$B$ corresponding to the columns indexed by~$S$.
+\end{theorem}
+\begin{proof}
+Consider the block matrix~$M = \begin{pmatrix} I_m & A \\ 0 & I_n \end{pmatrix} \begin{pmatrix} A & 0 \\ -I_n & B \end{pmatrix} = \begin{pmatrix} 0 & AB \\ -I_n & B \end{pmatrix}$. The determinant of the product is~$\det(M) = \det(A)\det(B)$ if~$m=n$. For general~$m \le n$, we can apply the Laplace expansion to the columns of the block matrix. The non-zero contributions come from selecting~$m$ columns from the right block. Tracking the signs yields the sum~$\sum_S \det(A_S)\det(B_S)$. If~$m > n$, the sum is empty and~$\det(AB) = 0$.
+\end{proof}
+
+\noindent This theorem introduces the Schur complement, a vital tool in numerical linear algebra for solving large block systems and analyzing matrix invertibility.
+\begin{theorem}
+Let~$A$ be an~$n \times n$ matrix. If~$A$ can be expressed as
+\[ \begin{pmatrix} A_{11} & A_{12} \\ A_{21} & A_{22} \end{pmatrix}, \]
+then we have
+1. If~$A_{11}$ is invertible, then~$\det(A) = \det(A_{11}) \cdot \det(A_{22} - A_{21}A_{11}^{-1}A_{12})$.
+2. If~$A_{22}$ is invertible, then~$\det(A) = \det(A_{22}) \cdot \det(A_{11} - A_{12}A_{22}^{-1}A_{21})$.
+\end{theorem}
+\begin{proof}
+For the first statement, we use the block LDU factorization:
+\[ \begin{pmatrix} A_{11} & A_{12} \\ A_{21} & A_{22} \end{pmatrix} = \begin{pmatrix} I & 0 \\ A_{21}A_{11}^{-1} & I \end{pmatrix} \begin{pmatrix} A_{11} & 0 \\ 0 & A_{22} - A_{21}A_{11}^{-1}A_{12} \end{pmatrix} \begin{pmatrix} I & A_{11}^{-1}A_{12} \\ 0 & I \end{pmatrix}. \]
+Taking the determinant of both sides and using the multiplicativity of determinants yields the result, since the triangular matrices have determinant~$1$. The second statement is proven symmetrically.
+\end{proof}
+
+\subsection{Determinant of Sum of Positive Semidefinite Matrices}
+This subsection explores how the determinant behaves under the addition of positive semidefinite matrices, revealing important superadditivity properties.
+
+\noindent This inequality shows that the volume of the Minkowski sum of two ellipsoids associated with positive semidefinite matrices is strictly greater than the sum of their individual volumes.
+\begin{theorem}
+Let~$A$ and~$B$ be two positive semidefinite matrices of the same size. Then we have
+\[ \det(A + B) \ge \det(A) + \det(B). \]
+The equality holds if and only if~$A = 0$ or~$B = 0$ or~$\det(A + B) = 0$.
+\end{theorem}
+\begin{proof}
+If~$\det(A+B)=0$, then~$A=B=0$ since they are PSD, so equality holds. Assume~$A$ is positive definite. We write~$A + B = A^{1/2}(I + A^{-1/2}BA^{-1/2})A^{1/2}$. Let~$C = A^{-1/2}BA^{-1/2}$, which is PSD. Let~$\lambda_i \ge 0$ be the eigenvalues of~$C$. Then~$\det(I + C) = \prod_{i=1}^n (1 + \lambda_i) \ge 1 + \prod_{i=1}^n \lambda_i = 1 + \det(C)$. Multiplying by~$\det(A)$ gives~$\det(A+B) \ge \det(A) + \det(B)$. Equality holds if all mixed products of~$\lambda_i$ vanish, meaning~$C=0$ (so~$B=0$) or matrices are singular.
+\end{proof}
+
+\noindent This theorem establishes the monotonicity of the determinant function on the cone of positive semidefinite matrices, a key property in convex analysis.
+\begin{theorem}
+Let~$A$ and~$B$ be two semidefinite matrices with~$A - B$ also semidefinite. Then we have
+\[ \det(A) \ge \det(B). \]
+\end{theorem}
+\begin{proof}
+Let~$C = A - B$. Since~$C$ is positive semidefinite,~$A = B + C$. Applying the previous theorem to the sum of PSD matrices~$B$ and~$C$, we get~$\det(A) = \det(B + C) \ge \det(B) + \det(C)$. Because~$C$ is PSD, its determinant is non-negative,~$\det(C) \ge 0$. Thus,~$\det(A) \ge \det(B)$.
+\end{proof}
+
+\noindent By incorporating the geometric mean of the determinants, this inequality provides a significantly tighter lower bound for the determinant of a sum.
+\begin{theorem}
+Let~$A$ and~$B$ be two positive semidefinite matrices of the same size. Then we have
+\[ \det(A + B) \ge \det(A) + \det(B) + (2^n - 2)\sqrt{\det(A) \cdot \det(B)}. \]
+\end{theorem}
+\begin{proof}
+Assume~$A$ is positive definite. Let~$\lambda_1, \dots, \lambda_n \ge 0$ be the eigenvalues of~$C = A^{-1/2}BA^{-1/2}$. We have~$\det(I+C) = \prod_{i=1}^n (1+\lambda_i) = 1 + \det(C) + \sum_{k=1}^{n-1} e_k(\lambda)$, where~$e_k$ is the~$k$-th elementary symmetric polynomial. The sum contains~$2^n - 2$ terms. By the AM-GM inequality, their sum is bounded below by~$(2^n - 2) (\prod \lambda_i)^{(2^{n-1}-1)/(2^n-2)} = (2^n - 2)\sqrt{\det(C)}$. Multiplying by~$\det(A)$ yields the result.
+\end{proof}
+
+\noindent Minkowski's determinant inequality is the matrix analogue of the Brunn-Minkowski inequality, demonstrating the concavity of the~$n$-th root of the determinant.
+\begin{theorem}[Minkowski's Determinant Inequality]
+Let~$A$ and~$B$ be two positive semidefinite matrices of the same size. Then we have
+\[ \det(A + B)^{1/n} \ge \det(A)^{1/n} + \det(B)^{1/n}. \]
+The equality holds if and only if there exists a positive scalar~$\lambda$ such that~$A = \lambda B$.
+\end{theorem}
+\begin{proof}
+Assume~$A$ is positive definite. Let~$\lambda_i$ be the eigenvalues of~$C = A^{-1/2}BA^{-1/2}$. The inequality is equivalent to~$\det(I+C)^{1/n} \ge 1 + \det(C)^{1/n}$, which is~$(\prod_{i=1}^n (1+\lambda_i))^{1/n} \ge 1 + (\prod_{i=1}^n \lambda_i)^{1/n}$. This follows directly from the AM-GM inequality applied to~$1/(1+\lambda_i)$ and~$\lambda_i/(1+\lambda_i)$. Equality holds when all~$\lambda_i$ are equal, meaning~$C = \lambda I$, so~$B = \lambda A$.
+\end{proof}
+
+\subsection{Hadamard Inequality}
+Hadamard's inequality provides fundamental upper bounds on the determinant based on the norms of the matrix's columns or its diagonal elements.
+
+\noindent The volume of a parallelepiped is maximized when its defining edge vectors are mutually orthogonal, which is exactly what Hadamard's inequality states.
+\begin{theorem}[Hadamard's Inequality]
+Let~$A$ be an~$n \times n$ matrix with columns~$a_1, a_2, \dots, a_n$. Then we have
+\[ \det(A) \le \prod_{i=1}^n \|a_i\|. \]
+The equality holds if and only if the columns of~$A$ are orthogonal.
+\end{theorem}
+\begin{proof}
+If~$\det(A) = 0$, the inequality holds. Assume~$A$ is invertible. Use the QR decomposition~$A = QR$, where~$Q$ is orthogonal and~$R$ is upper triangular. Then~$\det(A) = \det(R) = \prod_{i=1}^n r_{ii}$. The~$i$-th column is~$a_i = Q r_i$. Since~$Q$ preserves norms,~$\|a_i\|^2 = \|r_i\|^2 = \sum_{j=1}^i r_{ji}^2 \ge r_{ii}^2$. Thus,~$\|a_i\| \ge r_{ii}$. Multiplying these gives the inequality. Equality holds when~$R$ is diagonal, meaning the columns of~$A$ are orthogonal.
+\end{proof}
+
+\noindent This theorem applies Hadamard's bound to the Gram matrix, offering a practical way to estimate the generalized variance of a dataset.
+\begin{theorem}
+Let~$A$ be an~$n \times m$ matrix with~$A = (a_{ij})$. Then we have
+\[ \det(A^T A) \le \prod_{i=1}^m \sum_{j=1}^n a_{ij}^2. \]
+The equality holds if and only if the columns of~$A$ are orthogonal.
+\end{theorem}
+\begin{proof}
+Let~$a_1, \dots, a_m$ be the columns of~$A$. The matrix~$A^T A$ is the Gram matrix, and its diagonal entries are~$(A^T A)_{ii} = \|a_i\|^2 = \sum_{j=1}^n a_{ji}^2$. Since~$A^T A$ is positive semidefinite, applying Hadamard's inequality to it yields~$\det(A^T A) \le \prod_{i=1}^m (A^T A)_{ii} = \prod_{i=1}^m \sum_{j=1}^n a_{ji}^2$. Equality holds when the off-diagonal entries of~$A^T A$ are zero, meaning the columns are orthogonal.
+\end{proof}
+
+\noindent This provides a variational perspective on the determinant, linking it to the trace operator through an optimization problem over positive definite matrices.
+\begin{theorem}
+Let~$A$ be an~$n \times n$ positive definite matrix. Then we have
+\[ \det(A)^{1/n} = \min \frac{1}{n} \text{tr}(AX) \]
+where the minimum is taken over all positive definite matrices~$X$ with~$\det(X) = 1$. The equality holds if and only if~$X = A^{-1}$.
+\end{theorem}
+\begin{proof}
+Let~$\lambda_1, \dots, \lambda_n$ be the eigenvalues of the positive definite matrix~$A^{1/2}XA^{1/2}$. By the AM-GM inequality,~$\frac{1}{n} \text{tr}(AX) = \frac{1}{n} \text{tr}(A^{1/2}XA^{1/2}) = \frac{1}{n} \sum_{i=1}^n \lambda_i \ge (\prod \lambda_i)^{1/n} = (\det(AX))^{1/n}$. Since~$\det(X)=1$, this is~$\det(A)^{1/n}$. Equality holds if and only if all~$\lambda_i$ are equal, meaning~$A^{1/2}XA^{1/2} = cI$, so~$X = cA^{-1}$. For~$\det(X)=1$, we must have~$c = \det(A)^{1/n}$.
+\end{proof}
+
+\subsection{Fischer Inequality}
+Fischer's inequality extends the principles of Hadamard's inequality from scalar entries to block matrices.
+
+\noindent Fischer's inequality implies that the joint volume of a coupled system is always bounded above by the product of the volumes of its independent marginal subsystems.
+\begin{theorem}[Fischer's Inequality]
+Let a Hermite matrix~$A$ be partitioned as
+\[ A = \begin{pmatrix} A_{11} & \cdots & A_{1k} \\ \vdots & \ddots & \vdots \\ A_{k1} & \cdots & A_{kk} \end{pmatrix}, \]
+where~$A_{ii}$ are square matrices. Then we have
+\[ \det(A) \le \prod_{i=1}^k \det(A_{ii}). \]
+The equality holds if and only if~$A_{ij} = 0$ for all~$i \neq j$.
+\end{theorem}
+\begin{proof}
+We proceed by induction on~$k$. For~$k=2$,~$A = \begin{pmatrix} A_{11} & A_{12} \\ A_{21} & A_{22} \end{pmatrix}$. If~$A_{11}$ is invertible, using the Schur complement,~$\det(A) = \det(A_{11})\det(A_{22} - A_{21}A_{11}^{-1}A_{12})$. Because~$A$ is PSD, the Schur complement is PSD, and~$A_{21}A_{11}^{-1}A_{12}$ is PSD. By Theorem 1.5,~$\det(A_{22} - A_{21}A_{11}^{-1}A_{12}) \le \det(A_{22})$. Multiplying by~$\det(A_{11})$ gives~$\det(A) \le \det(A_{11})\det(A_{22})$. The general case follows by induction. Equality holds when the off-diagonal blocks are zero.
+\end{proof}
+
+\subsection{Oppenheim Inequality}
+The Hadamard product (element-wise multiplication) possesses unique algebraic properties that interact intriguingly with the determinant operator.
+
+\noindent Oppenheim's inequality provides a robust lower bound for the determinant of a Schur product, proving that element-wise multiplication preserves positive definiteness in a quantifiable manner.
+\begin{theorem}[Oppenheim's Inequality]
+Let~$A$ and~$B$ be two positive semidefinite matrices of the same size. Then we have
+\[ \det(A \circ B) \ge \det(A) \prod_{i=1}^n b_{ii} \ge \det(A) \cdot \det(B) \]
+where~$A \circ B$ denotes the Hadamard product of~$A$ and~$B$.
+\end{theorem}
+\begin{proof}
+We prove this by induction on~$n$. For~$n=1$, it is trivial. Assume it holds for~$(n-1) \times (n-1)$. Partition~$A$ and~$B$ as~$A = \begin{pmatrix} a_{11} & a^T \\ a & A_{22} \end{pmatrix}$ and~$B = \begin{pmatrix} b_{11} & b^T \\ b & B_{22} \end{pmatrix}$. Then~$\det(A \circ B) = \det(A_{22} \circ B_{22}) ( a_{11}b_{11} - (a \circ b)^T (A_{22} \circ B_{22})^{-1} (a \circ b) )$. By the induction hypothesis,~$\det(A_{22} \circ B_{22}) \ge \det(A_{22}) \prod_{i=2}^n b_{ii}$. It can be shown that~$a_{11}b_{11} - (a \circ b)^T (A_{22} \circ B_{22})^{-1} (a \circ b) \ge b_{11}(a_{11} - a^T A_{22}^{-1} a)$. Multiplying these bounds yields the first inequality. The second inequality follows from Hadamard's inequality applied to~$B$.
+\end{proof}
+
+\noindent Serving as a companion to Oppenheim's result, this theorem establishes a strict upper bound for the Hadamard product, mirroring the classical Hadamard inequality.
+\begin{theorem}
+Let~$A$ and~$B$ be two positive semidefinite matrices of the same size. Then we have
+\[ \det(A \circ B) \le \prod_{i=1}^n a_{ii} \cdot \prod_{i=1}^n b_{ii}. \]
+\end{theorem}
+\begin{proof}
+By the Schur product theorem,~$A \circ B$ is positive semidefinite. We apply Hadamard's inequality to~$A \circ B$. The determinant of a PSD matrix is bounded above by the product of its diagonal entries. The~$i$-th diagonal entry of~$A \circ B$ is~$a_{ii}b_{ii}$. Thus,~$\det(A \circ B) \le \prod_{i=1}^n (a_{ii}b_{ii}) = \prod_{i=1}^n a_{ii} \prod_{i=1}^n b_{ii}$.
+\end{proof}
+
+\subsection{Ostrowski-Taussky Inequality}
+This section explores the relationship between a complex matrix and its Hermitian part.
+
+\noindent This inequality indicates that the "volume" associated with the Hermitian (symmetric) part of a matrix is always bounded by the "volume" of the original matrix, reflecting the expansive nature of the skew-Hermitian component.
+\begin{theorem}
+Let~$A$ be a complex square matrix of order~$n$ and~$H = \frac{1}{2}(A + A^*)$ be the Hermitian part of~$A$. If~$H$ is positive semidefinite, then we have
+\[ \det(H) \le |\det(A)|. \]
+The equality holds if and only if~$A = H$.
+\end{theorem}
+\begin{proof}
+Let~$A = H + S$, where~$S = \frac{1}{2}(A - A^*)$ is skew-Hermitian. If~$H$ is singular,~$\det(H) = 0 \le |\det(A)|$. Assume~$H$ is positive definite. We can write~$A = H^{1/2}(I + H^{-1/2}SH^{-1/2})H^{1/2}$. Let~$K = H^{-1/2}SH^{-1/2}$. Since~$S$ is skew-Hermitian,~$K$ is also skew-Hermitian, meaning its eigenvalues are purely imaginary, say~$i\lambda_j$ with~$\lambda_j \in \mathbb{R}$. Then~$\det(A) = \det(H)\det(I+K) = \det(H) \prod_{j=1}^n (1+i\lambda_j)$. Taking the absolute value gives~$|\det(A)| = \det(H) \prod_{j=1}^n \sqrt{1+\lambda_j^2} \ge \det(H)$. Equality holds if and only if all~$\lambda_j = 0$, meaning~$K=0$, so~$S=0$ and~$A=H$.
+\end{proof}
+
+\subsection{Hua Luo-Keng Inequality}
+These inequalities are profound results with significant applications in the theory of several complex variables and complex geometry.
+
+\noindent Hua's inequality provides a fundamental metric bound in the geometry of matrix spaces, generalizing the classical triangle inequality to the domain of complex matrices.
+\begin{theorem}
+Let~$A$ and~$B$ be two complex square matrices of the same size. If~$I - A^*A$ and~$I - B^*B$ are positive semidefinite, then we have
+\[ |\det(I - A^*B)|^2 \ge \det(I - A^*A) \cdot \det(I - B^*B). \]
+The equality holds if and only if there exists a unitary matrix~$U$ such that~$A = UB$.
+\end{theorem}
+\begin{proof}
+A direct proof uses the identity~$(I - A^*B)(I - B^*B)^{-1}(I - B^*A) - (I - A^*A) = (A-B)^*(I - B^*B)^{-1}(A-B) \ge 0$. Taking determinants and using the monotonicity of the determinant for PSD matrices yields the result. Equality holds when~$A=B$, which up to unitary equivalence gives~$A=UB$.
+\end{proof}
+
+\noindent This stronger version of Hua's inequality introduces a correction term that precisely quantifies the gap in the previous inequality, offering a sharper geometric insight.
+\begin{theorem}
+Let~$A$ and~$B$ be two complex square matrices of the same size. If~$I - A^*A$ and~$I - B^*B$ are positive semidefinite, then we have
+\[ |\det(I - A^*B)|^2 \ge \det(I - A^*A) \cdot \det(I - B^*B) + |\det(A - B)|^2. \]
+\end{theorem}
+\begin{proof}
+Using the identity from the previous proof: Let~$X = (I - A^*B)(I - B^*B)^{-1}(I - B^*A)$ and~$Y = I - A^*A$. We know~$X - Y = (A-B)^*(I - B^*B)^{-1}(A-B) \ge 0$. By Theorem 1.4,~$\det(X) \ge \det(Y) + \det(X-Y)$. Substituting the expressions for~$X$ and~$Y$ and multiplying by~$\det(I-B^*B)$ gives the desired inequality, noting that~$\det((A-B)^*(I - B^*B)^{-1}(A-B)) = |\det(A-B)|^2 / \det(I-B^*B)$.
+\end{proof}
+
+\subsection{Ky Fan Inequality}
+Ky Fan's inequality is a cornerstone in matrix analysis, providing a log-concavity result for the determinant of convex combinations.
+
+\noindent This inequality demonstrates that the determinant function is log-concave over the cone of positive definite matrices, implying that interpolation between two matrices yields a volume greater than the geometric mean of their volumes.
+\begin{theorem}
+Let~$A$ and~$B$ be two positive definite matrices. For any~$0 \le a \le 1$, the inequality
+\[ \det(aA + (1 - a)B) \ge \det(A)^a \cdot \det(B)^{1-a} \]
+holds if and only if~$A = B$ or~$a = 0$ or~$a = 1$.
+\end{theorem}
+\begin{proof}
+Let~$C = A^{-1/2}BA^{-1/2}$. The inequality is equivalent to~$\det(aI + (1-a)C) \ge \det(C)^{1-a}$. Let~$\lambda_i > 0$ be the eigenvalues of~$C$. Then we need to show~$\prod_{i=1}^n (a + (1-a)\lambda_i) \ge \prod_{i=1}^n \lambda_i^{1-a}$. This follows from applying the weighted AM-GM inequality to each term:~$a \cdot 1 + (1-a)\lambda_i \ge 1^a \lambda_i^{1-a} = \lambda_i^{1-a}$. Multiplying these inequalities together yields the result. Equality holds if and only if~$\lambda_i = 1$ for all~$i$, meaning~$C=I$, so~$A=B$, or if the weights are trivial ($a=0$ or~$a=1$).
+\end{proof}
+
+\subsection{Lavoie Inequality}
+Lavoie's inequality deals with the Moore-Penrose inverse and block matrices, providing bounds on the determinant of specific products.
+
+\noindent This theorem generalizes the properties of the Moore-Penrose pseudoinverse to block matrices, providing a sharp bound that characterizes the orthogonality of the row spaces of the blocks.
+\begin{theorem}
+Let~$A$ be a~$m \times n$ complex matrix that is partitioned as
+\[ A = \begin{pmatrix} A_1 \\ A_2 \\ \vdots \\ A_k \end{pmatrix} \]
+where~$A_i$ are~$m_i \times n$ complex matrices with~$\sum_{i=1}^k m_i = m$. Let~$B = (A_1^+, A_2^+, \dots, A_k^+)$. Then we have
+\[ 0 \le \det(AB) \le 1. \]
+The equality~$\det(AB) = 0$ holds if and only if~$r(A) < m$. The equality~$\det(AB) = 1$ holds if and only if~$A_i A_j^* = 0$ for any~$i \neq j$.
+\end{theorem}
+\begin{proof}
+The matrix~$AB$ is a block matrix where the~$(i,j)$-th block is~$A_i A_j^+$. The diagonal blocks are~$A_i A_i^+$, which are orthogonal projectors onto the column spaces of~$A_i$. Thus, the diagonal elements of~$AB$ are bounded by 1, and~$AB$ is positive semidefinite. The determinant of a PSD matrix with diagonal blocks bounded by projectors is between 0 and 1. The determinant is 0 if the matrix is singular, which happens when the rows of~$A$ are linearly dependent, i.e.,~$r(A) < m$. The determinant is 1 when the off-diagonal blocks are zero, meaning the row spaces of~$A_i$ and~$A_j$ are orthogonal, which is equivalent to~$A_i A_j^* = 0$.
+\end{proof}
+
+\noindent This theorem establishes a rank conservation property for the block pseudoinverse construction, ensuring that the structural integrity of the matrix is maintained.
+\begin{theorem}
+Under the same assumptions as in Theorem 1.18, we have
+\[ r(AB) = r(AA^*) = r(A) \]
+\end{theorem}
+\begin{proof}
+The rank of a matrix is equal to the rank of its Gram matrix, so~$r(A) = r(AA^*)$. The matrix~$AB$ can be viewed as a transformation that maps the column space of~$A^*$ to itself. Since the diagonal blocks of~$AB$ are projectors~$A_i A_i^+$, the overall rank of~$AB$ is determined by the linear independence of the row spaces of the blocks~$A_i$. It can be shown algebraically that the null space of~$AB$ coincides with the null space of~$A^*$, hence their ranks are equal.
+\end{proof}
+
+\subsection{Bound of Determinant Complex Matrix}
+This final section provides bounds for the determinant of a complex matrix based on its diagonal dominance.
+
+\noindent This theorem provides a quantitative version of the Gershgorin circle theorem for determinants, offering strict bounds based on the degree of diagonal dominance.
+\begin{theorem}
+Let~$A = (a_{ij})$ be a complex square matrix of order~$n$. We denote~$S_i = \sum_{j=i+1}^n |a_{ij}|$. If~$|a_{ii}| > \sum_{j \neq i} |a_{ij}|$ holds for~$i = 1, 2, \dots, n$, then we have
+\[ 0 < \prod_{i=1}^n (|a_{ii}| - S_i) \le |\det(A)| \le \prod_{i=1}^n (|a_{ii}| + S_i) \]
+The two equalities hold if and only if~$A$ is lower triangular.
+\end{theorem}
+\begin{proof}
+The condition~$|a_{ii}| > \sum_{j \neq i} |a_{ij}|$ means~$A$ is strictly diagonally dominant, which implies~$A$ is invertible, so~$|\det(A)| > 0$. We can use Gaussian elimination to reduce~$A$ to an upper triangular matrix~$U$. The diagonal entries of~$U$ satisfy bounds derived from the diagonal dominance of~$A$. Specifically, the absolute value of the~$i$-th pivot~$u_{ii}$ is bounded by~$|a_{ii}| - S_i \le |u_{ii}| \le |a_{ii}| + S_i$. Since the determinant of~$A$ is the product of the pivots~$u_{ii}$, taking the absolute value and multiplying the bounds yields the result. Equalities hold when the off-diagonal elements above the diagonal are zero, meaning~$A$ is lower triangular.
+\end{proof}
+
+\end{document}

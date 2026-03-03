@@ -478,7 +478,7 @@ The condition (b) in Definition~\eqref{def2.1} means that for any $x,y \in X$,
 x=y \iff (x,y) \in U \text{ for all } U \in \mathcal{U}.
 \]
 We can say that the more $U \in \mathcal{U}$ "small", the closer $x$ and $y$ are.
-The uniform structure $\mathcal{U}$ provides a set of criteria that measure the closeness between two points in the space $X$.
+The uniform structure~$\mathcal{U}$ provides a set of criteria that measure the closeness between two points in the space $X$.
 Those facts naturally lead to the definition of uniform neighborhood, i.e.,
 \[
     \mathcal{N}_x = \{U(x): U \in \mathcal{U}\}, \quad \text{for any } x \in X.
@@ -545,7 +545,7 @@ Basicaly, we expect that there exists a metric that induces the uniform structur
 However, this is not always possible.
 \begin{theorem} \label{thm2.2}
     Let $(X,\mathcal{U})$ be a uniform space. 
-    There exists a metric $d$ on $X$ inducing the uniform structure $\mathcal{U}$ if and only if 
+    There exists a metric $d(\cdot,\cdot)$ on $X$ inducing the uniform structure $\mathcal{U}$ if and only if 
     $\mathcal{U}$ has a countable base.
 \end{theorem}
 \begin{proof}
@@ -668,6 +668,468 @@ We can answer the question by using Theorem~\eqref{thm2.3}.
         Thus $\tau=\tau'$, which means that $\tau$ is a uniform topology.
 \end{enumerate}
 
+\end{proof}
+Finally, we will talk about the existence of limits in a uniform space.
+It depends on compactness and completeness of the uniform space, while
+compactness is correspondent to topology and completeness is correspondent to uniform structure.
+So we focus on the completeness of a uniform space.
+\begin{definition}~\label{def2.3}
+    Let~$(X,\mathcal{U})$ be a uniform space. 
+    If a net~$\{x_\alpha\}$ in~$X$ satisfies that for any~$U \in \mathcal{U}$, there exists~$\alpha_0$ such that~$(x_\alpha,x_\beta) \in U$ for all~$\alpha,\beta \geq \alpha_0$, then we say that~$\{x_\alpha\}$ is a \textbf{Cauchy net}.
+    If any Cauchy net in~$X$ converges to a point in~$X$, then we say that the uniform space~$(X,\mathcal{U})$ is \textbf{complete}.
+\end{definition}
+One can observe that~$\mathcal{U}$ can be replaced by its base in the definition.
+From Definition~\eqref{def2.3}, we can easily verify that~$X$ is complete 
+if and only if every Cauchy net has a cluster point in~$X$.
+This fact is useful in proving the following theorem.
+\begin{theorem} \label{thm2.5}
+    Let~$(X,\mathcal{U})$ be a uniform space. Then~$X$ is complete if and only if
+    for any family~$\mathcal{A}$ of closed subsets of~$X$ with~$\mathcal{A}^{*} \neq \emptyset$,
+    satisfying that if 
+    \begin{equation} \label{eq2.1}
+    \forall U \in \mathcal{U}, \exists A \in \mathcal{A}, A \times A \subset U
+    \end{equation}
+    then $\bigcap \mathcal{A} \neq \emptyset$.
+\end{theorem}
+\begin{proof}
+    Assume that~$X$ is complete and~$\mathcal{A}$ is a family of closed subsets of~$X$
+    satisfying~\eqref{eq2.1}.
+    Without loss of generality, we can assume that $\mathcal{A}=\mathcal{A}^{*}$.
+    For any~$A \in \mathcal{A}$, we choose~$x_A \in A$ and let~$\{x_A\}$ be the net indexed by~$\mathcal{A}$.
+    We are going to show that~$\{x_A\}$ is a Cauchy net.
+    For any~$U \in \mathcal{U}$, there exists~$A_0 \in \mathcal{A}$ such that~$A_0 \times A_0 \subset U$.
+    For any~$A,B \in \mathcal{A}$ with~$A,B \subset A_0$, we have~$(x_A,x_B) \in A_0 \times A_0 \subset U$.
+    Thus~$\{x_A\}$ is a Cauchy net and there exists~$x \in X$ such that~$x_A \rightarrow x$,
+    which implies that~$x \in \bigcap \mathcal{A}$ and thus~$\bigcap \mathcal{A} \neq \emptyset$.
+
+    Conversely, assume that for any family~$\mathcal{A}$ of closed subsets of~$X$ with~$\mathcal{A}^{*} \neq \emptyset$,
+    satisfying~\eqref{eq2.1} then~$\bigcap \mathcal{A} \neq \emptyset$. 
+    Let~$\{x_t\}$ be a Cauchy net in~$X$ and set~$A_t={\{x_s: s \geq t\}}$.
+    Thus~$\mathcal{A}=\{\overline{A_t}: t \in T\}$ is a family of closed subsets of~$X$ with~$\mathcal{A}^{*}\neq \emptyset$.
+    For any~$U \in \mathcal{U}$, there exists $V \in \mathcal{U}$ such that $V \circ V \subset U$.
+    Then there exists~$t_0$ such that $A_{t_0} \times A_{t_0} \subset V$, which implies that for any $t \geq t_0$, 
+    we have 
+    $$ \overline{A_t} \times \overline{A_t} \subset V \circ V \subset U $$.
+    Therefore, $\mathcal{A}$ satisfies~\eqref{eq2.1} and thus~$\bigcap \mathcal{A} \neq \emptyset$.
+    Thus $\{x_t\}$ converges to some point in~$X$, which means that~$X$ is complete.
+\end{proof}
+
+\section{Topological Vector Space}
+
+\begin{definition}~\label{def3.1}
+    Let~$X$ be a vector space over a field~$\mathbb{K}$.
+    A uniform structure~$\mathcal{U}$ on~$X$ is called a \textbf{vector uniform structure} if the addition and scalar multiplication are uniformly continuous with respect to $\mathcal{U}$.
+    The pair~$(X,\mathcal{U})$ is called a \textbf{topological vector space}.
+\end{definition}
+In the topological vector space~(TVS), the vector space structure and the topology structure are compatible with each other.
+A simple but important fact is that the scalar multiplication and translation are homeomorphisms in a TVS.
+Thus a TVS is homogeneous, which means that the local structure of a TVS is uniform everywhere.
+In particular, the neighborhood system of any point in a TVS can be obtained by translating the neighborhood system $\mathcal{N}_0$ of the zero vector.
+In fact we have 
+$$\mathcal{N}_x = x+\mathcal{N}_0 = \{x+U: U \in \mathcal{N}_0\} \text{ for any }x \in X.$$
+Similarly, when we talk about the limits of sequences or nets in a TVS, we can always translate the sequence or net by a fixed vector and thus only need to consider the limits of sequences or nets converging to the zero vector.
+Now let us focus on the uniform structure of a TVS.
+For any $A \subset X$, we define
+$$ V_A=\{(x,y) \in X \times X: y-x \in A\} $$
+We can easily verify that $\mathcal{V}={V_A:A \subset X}$ is a uniform structure base on $X$.
+We call the uniform structure $\mathcal{W}$ generated by $\mathcal{V}$ the \textbf{vector uniform structure} on $X$.
+Moreover, we have 
+$$ V_A(x)=x+A \text{ for any }x \in X \text{, } A \in \mathcal{N}_0. $$
+Thus the uniform topology induced by the vector uniform structure $\mathcal{W}$ is the same as the topology generated by the neighborhood system $\mathcal{N}_0$.
+In other words, the vector uniform structure $\mathcal{W}$ induces the topology of the TVS.
+
+Assume that~$X,Y$ are two TVSs over a field~$\mathbb{K}$. We denote all the linear continuous functions from $X$ to $Y$ by $\mathcal{L}(X,Y)$.
+If~$T \in \mathcal{L}(X,Y)$ is a homeomorphism and~$T^{-1} \in \mathcal{L}(Y,X)$, then we say that~$T$ is a \textbf{topological isomorphism} from~$X$ to~$Y$.
+For any linear funcion~$T \in \mathcal{L}(X,Y)$, we have
+$$ Tx=Tx_0 + T(x-x_0). $$
+Thus the continuity of $T$ at any point $x_0 \in X$ is equivalent to the continuity of $T$ at the zero vector.
+In addition, the continuity of $T$ at the zero vector is equivalent to the existence of a neighborhood $U$ of the zero vector such that $T(U)$ is a neighborhood of the zero vector in $Y$.
+This fact implies that $T \in \mathcal{L}(X,Y)$ if and only if $T$ is uniformly continuous with respect to the vector uniform structures on $X$ and $Y$.
+Thus a topological isomorphism must be a uniform isomorphism.
+
+From above we can see that the structure of a TVS is totally determined by its neighborhood system.
+Thus it's important to study the neighborhood system of a TVS.
+\begin{theorem} \label{thm3.1}
+    Suppose that $X$ is a TVS over a field $\mathbb{K}$ and $\mathcal{B}$ is a neighborhood base of $X$,
+    then we have the following conclusions:
+    \begin{enumerate}
+        \item For any $A,B \in \mathcal{B}$, there exists $C \in \mathcal{B}$ such that $C \subset A \cap B$.
+        \item $\bigcap_{A \in \mathcal{B}} A = \{0\}$.
+        \item For any $A \in \mathcal{B}$, there exists $B \in \mathcal{B}$ such that $B+B \subset A$.
+        \item For any $A \in \mathcal{B}$ and $\lambda \in \mathbb{K}$ with $|\lambda| \leq 1$, there exists $B \in \mathcal{B}$ such that $\lambda B \subset A$.
+        \item For any $A \in \mathcal{B}$, we have $X = \bigcup_{\lambda \in \mathbb{K}} \lambda A$.
+    \end{enumerate}
+    Conversely, if $\mathcal{B}$ is a family of subsets of $X$ satisfying the above conditions, then there exists a unique TVS structure on $X$ such that $\mathcal{B}$ is a neighborhood base of the zero vector.
+\end{theorem}
+\begin{proof}
+    The only if part is straightforward by the definition of a TVS.
+    We only prove the if part.
+    Define $\mathcal{N}_0 = \{A \subset X: \exists B \in \mathcal{B}, B \subset A\}$ and $\mathcal{N}_x = x + \mathcal{N}_0$ for any $x \in X$.
+    Then $\mathcal{N}_x$ is a neighborhood system of $x$ for any $x \in X$.
+    We are going to show that there exists a unique uniform structure $\mathcal{U}$ on $X$ such that for any $x \in X$, $\mathcal{N}_x$ is the neighborhood system of $x$ with respect to the uniform topology induced by $\mathcal{U}$.
+    Define
+    $$ \tau = \{A \subset X: \forall x \in A, \exists U \in \mathcal{N}_x, U \subset A\}. $$
+    It's straightforward to verify that $\tau$ is a topology on $X$ and for any $x \in X$, $\mathcal{N}_x$ is the neighborhood system of $x$ with respect to $\tau$.
+    Moreover, we have $\bigcap_{A \in \mathcal{B}} A = \{0\}$, which implies that $\tau$ is hausdorff.
+    Thus there exists a unique uniform structure $\mathcal{U}$ on $X$ such that for any $x \in X$, $\mathcal{N}_x$ is the neighborhood system of $x$ with respect to the uniform topology induced by $\mathcal{U}$.
+
+    Finally, we need to verify that the addition and scalar multiplication are uniformly continuous with respect to the uniform structure~$\mathcal{U}$.
+    For any~$A,B,C,D \in \mathcal{B}$, we have
+    $$ (A+B) + (C+D) = (A+C) + (B+D) \subset A+B+C+D. $$
+    Thus there exists $E \in \mathcal{B}$ such that $(E+E)+(E+E) = 4E \subset A+B+C+D$, which implies that
+    $$ (E+E) + (E+E) = (E+E) + (E+E) \subset (A+B) + (C+D). $$
+    This shows that the addition is uniformly continuous with respect to~$\mathcal{U}$.
+    For any~$A \in \mathcal{B}$ and~$\lambda \in \mathbb{K}$ with $|\lambda| \leq 1$, there exists~$B \in \mathcal{B}$ such that~$\lambda B \subset A$.
+    Thus for any~$x,y \in X$ with~$y-x \in B$,
+    we have~$y-x \in \lambda B$ for some~$\lambda \in \mathbb{K}$ with~$|\lambda| \leq 1$, which implies that~$y-x \in A$.
+    This shows that the scalar multiplication is uniformly continuous with respect to~$\mathcal{U}$.
+\end{proof}
+Theorem~\eqref{thm3.1} tells us that when we want to construct a TVS structure on a vector space, we only need to construct a family of subsets satisfying the conditions in Theorem~\eqref{thm3.1},
+instead of constructing the topology and verifying the continuity of addition and scalar multiplication.
+Thus we can choose some special neighborhood base to simplify our analysis on a TVS.
+\begin{proposition}
+    The following families of subsets of a vector space $X$ can be used as neighborhood bases of the zero vector in a TVS structure on $X$:
+    \begin{enumerate}
+        \item The family of all balanced $0$-neighborhoods of $X$.
+        \item The family of all symmetric $0$-neighborhoods of $X$.
+        \item The family of all closed (or open) $0$-neighborhoods of $X$.
+        \item The family of all closed (or open) balanced $0$-neighborhoods of $X$.
+    \end{enumerate}
+\end{proposition}
+\begin{proof}
+    The proof is straightforward by verifying that each of the families satisfies the conditions in Theorem~\eqref{thm3.1}.
+    We only verify the fourth one.
+    For any~$0$-neighborhood~$A$, there exists a closed~$0$-neighborhood~$B$ such that~$B \subset A$.
+    Choose a~$0$-neighborhood~$C$ such that~$\lambda C \subset B$ for any~$|\lambda| \leq 1$,
+    and let $D=\cap_{|\lambda| \leq 1} \lambda C$.
+    Then $\bar{D}$ is a closed balanced $0$-neighborhood and $\bar{D} \subset B \subset A$.
+\end{proof}
+This shows that we can only consider balanced $0$-neighborhoods when we want to construct a TVS structure on a vector space.
+Moreover, from the condition (3) in Theorem~\eqref{thm3.1},
+we can only consider the $0$-neighborhoods in the form of $A+A$.
+
+An interesting question is when a TVS is metrizable.
+From Theorem~\eqref{thm2.2}, we know that a TVS is metrizable if and only if its vector uniform structure has a countable base.
+The following theorem gives us a more explicit criterion for the metrizability of a TVS.
+\begin{theorem} \label{thm3.2}
+    For a TVS $X$, the following conclusions are equivalent:
+    \begin{enumerate}
+        \item $X$ is metrizable.
+        \item $X$ has a countable neighborhood base at the zero vector.
+        \item $X$ is a $F^*$ space.
+        \item The topology of $X$ can be induced by a translation invariant metric.
+    \end{enumerate}
+\end{theorem}
+\begin{proof}
+    We know that (d) implies (a) and (a) implies (b) by Theorem~\eqref{thm2.2}.
+    We only need to prove that (b) implies (c) and (c) implies (d).
+
+    (c) $\Rightarrow$ (d): Suppose that $X$ has the quasi norm $\|\cdot\|$.
+    Define $d(x,y) = \|x-y\|$ for any~$x,y \in X$.
+    Then $d$ is a translation invariant metric on $X$ and induces the topology of $X$.
+    In fact, for any $x,y,z \in X$, we have
+    \begin{align}
+        d(x,y) & = \|x-y\| \nonumber \\
+        & \leq K(\|x-z\| + \|z-y\|) \nonumber \\
+        & = K(d(x,z) + d(z,y)). \nonumber
+    \end{align}
+    Thus $d$ is a metric on $X$. trivially, we can notice that $d$ is translation invariant and induces the topology of $X$.
+    By the definition of a $F^*$ space, we have that $d$ is a translation invariant metric on $X$ inducing the topology of $X$.
+
+    (b) $\Rightarrow$ (c): Suppose that~$X$ has a countable neighborhood base~$\{A_n: n \in \NN\}$ at the zero vector.
+    Without loss of generality, we can assume that~$A_n$ is balanced and~$A_{n+1} + A_{n+1} \subset A_n$ for all~$n \in \NN$.
+    We fix a number $r=0.r_1 r_2 \cdots r_n$ with~$r_i = 0 \text{ or } 1$ and $r_n=1$.
+    Define 
+    $$ A_k = \sum_{i=1}^{k} r_i A_i $$
+    with $A_0=X$ and 
+    $$\|x\| = \inf\left\{ r: x \in A_r\right\} $$
+    It is straightforward to verify that $\|\cdot\|$ is a quasi norm on $X$ and thus $X$ is a $F^*$ space.
+    We are going to verify that $\|\cdot\|$ induces the topology of $X$.
+    We will prove that for any sequence~$\{x_n\}$ in $X$, $x_n \rightarrow 0$ if and only if~$\|x_n\| \rightarrow 0$.
+    Define $V_r=\{x\in X : \|x\| < r \}$.
+    Let $j$ be the smallest integer such that $r_j=1$.
+    Then we have 
+    $$ A_n \subset V_r \subset A_{j-1}  $$
+    So we have that $\|\cdot\|$ induces the topology of $X$.
+\end{proof}
+    
+
+Next, we are going to talk about the operator between two TVSs.
+Specifically, we are interested in the bounded linear operator between two TVSs.
+A bounder linear operator is a linear operator that maps bounded sets to bounded sets, 
+which is a natural generalization of a continuous linear operator between two normed spaces.
+
+\begin{theorem}
+    Let~$X,Y$ be two TVSs and~$T: X \rightarrow Y$ be a linear operator.
+    If~$T$ is continous, then~$T$ is bounded.
+    Conversely, if~$X$ is metrizable and~$T$ is bounded, then~$T$ is continuous.
+    If $dim(X) < \infty$, then every linear operator $T: X \rightarrow Y$ is bounded.
+\end{theorem}
+\begin{proof}
+    The first conclusion is straightforward by the definition of continuity.
+    For the second conclusion, we assume that~$X$ is metrizable and~$T$ is bounded but not continuous.
+    Then there exists a sequence~$\{x_n\}$ in $X$ such that~$x_n \rightarrow 0$ but~$T(x_n)$ does not converge to~$0$ in~$Y$.
+    Since~$T$ is bounded, there exists a neighborhood~$V$ of the zero vector in~$Y$ such that for all~$n$, we have~$T(x_n) \notin V$. 
+    This contradicts the assumption that~$T$ is bounded.
+    Therefore, if~$X$ is metrizable and~$T$ is bounded, then~$T$ is continuous.
+
+    For the third conclusion, if~$\dim(X) < \infty$, then every linear operator from~$X$ to any TVS is bounded.
+\end{proof}
+
+Sometimes when we want define a linear operator between two TVSs, we only need to define the operator on a dense subset of the domain space.
+\begin{theorem}
+    \begin{enumerate}
+        \item Let~$X,Y$ be two metrizable TVSs and~$Y$ is sequentially complete.
+        Assume that~$D$ is a dense subspace of~$X$ and~$T \in \mathcal{L}(D,Y)$.
+        There exists a unique linear operator~$\tilde{T} \in \mathcal{L}(X,Y)$ such that~$\tilde{T}|_D = T$.
+        \item Let~$X,Y$ be two $B^*$ spaces and~$Y$ is complete.
+        Assume that~$A$ is a subset of~$X$ such that~$span(A)$ is dense in~$X$ and~$T \in \mathcal{L}(A,Y)$ satisfying
+        $$ \|\sum_{i}\alpha_i Tx_i\| \leq \beta \sum_{i}\|\alpha_i x_i\| $$
+        for all finite sums $\sum_{i}\alpha_i x_i$ with $x_i \in A$.
+        Then there exists a linear operator~$\tilde{T} \in \mathcal{L}(X,Y)$ such that~$\|\tilde{T}\| \leq \beta$.
+    \end{enumerate}
+\end{theorem}
+\begin{proof}
+    \begin{enumerate}
+        \item For any $x \in X$, there exists a sequence~$\{x_n\}$ in~$D$ such that~$x_n \rightarrow x$.
+        So~$T(x_n)$ is a Cauchy sequence in~$Y$ and thus converges to some point in~$Y$, which we denote by~$\tilde{T}(x)$.
+        We are going to verify that~$\tilde{T}$ is a linear operator and~$\tilde{T}|_D = T$.
+        For any~$x,y \in X$ and~$\alpha \in \mathbb{K}$, we have
+        \begin{align}
+            \tilde{T}(x+y) & = \lim_{n \rightarrow \infty} T(x_n+y_n) \nonumber \\
+            & = \lim_{n \rightarrow \infty} (T(x_n) + T(y_n)) \nonumber \\
+            & = \tilde{T}(x) + \tilde{T}(y), \nonumber
+        \end{align}
+        and
+        \begin{align}
+            \tilde{T}(\alpha x) & = \lim_{n \rightarrow \infty} T(\alpha x_n) \nonumber \\
+            & = \lim_{n \rightarrow \infty} \alpha T(x_n) \nonumber \\
+            & = \alpha \tilde{T}(x), \nonumber
+        \end{align}
+        So~$\tilde{T}$ is a linear operator.
+        For any~$x\in D$, we have~$x_n=x$ for all~$n$, so~$\tilde{T}(x)=T(x)$.
+        Therefore,~$\tilde{T}|_D = T$.
+        Finally, we need to verify that~$\tilde{T}$ is continuous.
+        For any~$y \in Y$ and~$\epsilon > 0$, there exists a neighborhood~$V$ of the zero vector in~$Y$ such that~$y+V \subset B(y,\epsilon)$.
+        Since~$T$ is continuous, there exists a neighborhood~$U$ of the zero vector in~$X$ such that~$T(U) \subset V$.
+        For any~$x \in U$, we have~$\tilde{T}(x) \in T(U) \subset V$, which implies that~$\tilde{T}(x) \in y+V \subset B(y,\epsilon)$.
+        Thus~$\tilde{T}$ is continuous and thus~$\tilde{T} \in \mathcal{L}(X,Y)$.
+        \item Let~$D=span(A)$. For any finite sum~$\sum_{i}\alpha_i x_i$ with~$x_i \in A$, we denote~ 
+        $x = \sum_{i}\alpha_i x_i$ and 
+        $$T(x) = \sum_{i}\alpha_i Tx_i$$.
+        If~$x=\sum_{i}\alpha_i x_i=\sum_{i}\alpha^{'}_i x_i$, then we have
+        $$ \|\sum_{i}(\alpha_i-\alpha^{'}_i) Tx_i\| \leq \beta \|\sum_{i}(\alpha_i-\alpha^{'}_i) x_i\| = 0, $$
+        which implies that~$T(x)$ is well defined.
+        It is straightforward by the condition that~$T \in \mathcal{L}(D,Y)$ and~$\|T\| \leq \beta$.
+        From (a), there exists a linear operator~$\tilde{T} \in \mathcal{L}(X,Y)$ such that~$\tilde{T}|_D = T$.
+        For any~$x \in X$, there exists a sequence~$\{x_n\}$ in~$D$ such that~$x_n \rightarrow x$.
+        Thus we have 
+        \begin{align}
+            \|\tilde{T}(x)\| & = \lim_{n \rightarrow \infty} \|\tilde{T}(x_n)\| \nonumber \\
+            & = \lim_{n \rightarrow \infty} \|T(x_n)\| \nonumber \\
+            & \leq \beta \lim_{n \rightarrow \infty} \|x_n\| = \beta\|x\|. \nonumber
+        \end{align}
+        Therefore,~$\tilde{T} \in \mathcal{L}(X,Y)$ and~$\|\tilde{T}\| \leq \beta$.
+    \end{enumerate}
+\end{proof}
+
+Next we are going to talk about the open mapping theorem and its applications in TVS.
+\begin{theorem}[Open Mapping Theorem]
+    Let~$X$ be a Frechet space and~$Y$ be a TVS.
+    If~$T \in \mathcal{L}(X,Y)$ and~$R(T)$ is second category in~$Y$, then 
+    $T$ is an open mapping and~$R(T)=Y$, thus~$Y$ is also a Frechet space.
+\end{theorem}
+\begin{proof}
+    Assume that~$\|\cdot \|$ is the quasi norm on~$X$ and~$B_r= \{x \in X: \|x\| < r\}$.
+    We only need to verify that for any~$r > 0$, $T(B_r)$ is a neighborhood of the zero vector in~$Y$.
+    Since~$R(T)$ is second category in~$Y$ and 
+    $$ R(T)=T(\bigcup_n n B_r )=\bigcup_n n T(B_r ), $$
+    we have that~$T(B_r)$ is not a nonwhere dense set in~$Y$.
+    Thus there exists a balanced neighborhood~$V_r$ of the zero vector in~$Y$ and~$b \in Y$
+    such taht $V_r + b \subset \overline{T(B_r)}$.
+    So we have 
+    $$ V_r \subset \overline{T(B_r)}-\overline{T(B_r)} \subset \overline{T(B_{2r})} $$
+    If we can prove that~$\overline{T(B_{r/2})} \subset T(B_r)$, we will have
+    $$ V_{r/4} \subset \overline{T(B_{r/2})} \subset T(B_r), $$
+    which implies that~$T(B_r)$ is a neighborhood of the zero vector in~$Y$.
+    For any~$y \in \overline{T(B_{r/2})}$, there exists a sequence~$\{x_n\}$ in~$B_{r/2}$ such that~$T(x_n) \rightarrow y$.
+    Since~$B_{r/2}$ is a complete metric space, there exists~$x \in B_{r/2}$ such that~$x_n \rightarrow x$.
+    Thus we have~$T(x)=y$ and thus~$y \in T(B_r)$.
+    So we have that~$T$ is an open mapping.
+
+    Since~$R(T)$ is a open subspace of~$Y$, we have~$R(T)=Y$ and thus~$Y$ is also a Frechet space.
+\end{proof}
+
+Open mapping theorem is a powerful tool in the analysis of TVS.
+The following facts are direct applications of the open mapping theorem.
+\begin{corollary} \label{cor3.1}
+    Let~$X,Y$ be two Frechet spaces and~$T \in \mathcal{L}(X,Y)$.
+     If~$T$ is injective, then~$T$ is a topological isomorphism from~$X$ to~$R(T)$.
+     If~$T$ is surjective, then~$T$ is a topological isomorphism from~$X/ker(T)$ to~$Y$.
+    \begin{enumerate}
+        \item If~$T$ is surjective, then~$T$ is an open mapping. The mapping~$T:X \rightarrow R(T)$ 
+        is open if and only if~$R(T)$ is d in~$Y$.
+        \item If~$T$ is bijective, then~$T^{-1}$ is continous and~$T$ is a topological isomorphism from~$X$ to~$Y$.
+        \item If~$(X,\tau)$ and~$(X,\tau_1)$ are two Frechet spaces and~$\tau_1 \subset \tau$, then we have~$\tau_1 = \tau$.
+    \end{enumerate}
+\end{corollary}
+
+From (b) in Corollary~\eqref{cor3.1}, we can see that the continuity of~$T$ and completeness of~$X$ 
+implies the continuity of~$T^{-1}$.
+
+\begin{theorem}[Closed Graph Theorem]
+    Let~$X,Y$ be two Frechet spaces and~$T: X \rightarrow Y$ be a linear operator.
+    If the graph of~$T$ 
+    $$ G(T)=\{(x,T(x)): x \in X\} $$
+    is closed in~$X \times Y$, then~$T$ is continuous.
+\end{theorem}
+\begin{proof}
+    We only need to verify that~$T$ is continuous at the zero vector.
+    For any~$y \in Y$ and~$\epsilon > 0$, there exists a neighborhood~$V$ of the zero vector in~$Y$ such that~$y+V \subset B(y,\epsilon)$.
+    Since~$G(T)$ is closed in~$X \times Y$, we have that~$G(T) \cap (X \times (y+V))$ is closed in~$X \times (y+V)$.
+    Since~$G(T) \cap (X \times (y+V))$ is not empty, there exists a neighborhood~$U$ of the zero vector in~$X$ such that
+    $$(U \times (y+V)) \cap G(T) = (U \times (y+V)) \cap G(T) \cap (X \times (y+V)) = U \times (y+V).$$
+    Thus for any~$x \in U$, we have
+    $$(x,T(x)) \in G(T) \cap (X \times (y+V)),$$ 
+    which implies that
+    $$T(x) \in y + V \subset B(y,\epsilon).$$
+    Therefore,~$T$ is continuous at the zero vector and thus continuous on $X$.
+\end{proof}
+The closed graph theorem is a powerful tool when we want to verify the continuity of a linear operator between two TVSs.
+For example, if we want to verify the continuity of a linear operator~$T: X \rightarrow Y$,
+we only need to verify that for any sequence~$\{x_n\}$ in~$X$ with~$x_n \rightarrow 0$ and~$T(x_n) \rightarrow y$, we have~$y=0$.
+
+Sometimes the continuity of a linear operator is not enough for our analysis.
+We expect the linear operator to have some kind of uniform behavior.
+\begin{definition}
+    Let~$F \subset \mathcal{L}(X,Y)$ be a family of linear operators from~$X$ to~$Y$.
+    For~$A \subset X$, if~$F(A)$ is bounded in~$Y$, then we say that~$F$ is \textbf{equibounded} at~$A$.
+    If~$F$ is equibounded at every bounded subset of~$X$, then we say that~$F$ is \textbf{equibounded}.
+    For any~$0$-neighborhood~$V \subset Y$, if there exists a neighborhood~$U$ of the zero vector in~$X$ such that~$F(U) \subset V$, then we say that~$F$ is \textbf{equicontinuous}.
+\end{definition}
+Here are some basic properties of equibounded and equicontinuous families of linear operators.
+\begin{proposition} \label{prop3.2}
+    For~$F \subset \mathcal{L}(X,Y)$ and the following conditions:
+    \begin{enumerate}
+        \item $F$ is equibounded at some neighborhood of the zero vector in~$X$.
+        \item $F$ is equicontinuous.
+        \item $F$ is equibounded..
+    \end{enumerate}
+    We have that (1) implies (2) and (2) implies (3).
+    If~$X,Y$ are $B^{*}$ spaces. then
+    $$ (1) \Leftrightarrow (2) \Leftrightarrow (3) \Leftrightarrow \sup_{T \in F} \|T\| < \infty $$
+\end{proposition}
+\begin{proof}
+    It is straightforward to verify that (1) implies (2).
+    Now we verify that (2) implies (3).
+    Assume that~$F$ is equicontinuous.
+    For any~$0$-neighborhood~$V \subset Y$, there exists a neighborhood~$U$ of the zero vector in~$X$ such that~$F(U) \subset V$.
+    For any~$A \subset X$, there exists a number~$r > 0$ such that~$A \subset rU$, which implies that~$F(A) \subset rV$ and thus~$F(A)$ is bounded in~$Y$.
+    Therefore,~$F$ is equibounded.
+
+    Finally, we verify that if~$X,Y$ are $B^{*}$ spaces, then (3) implies (1).
+    Assume that~$F$ is equibounded.
+    For any~$0$-neighborhood~$V \subset Y$, there exists a number~$r > 0$ such that~$V \supset rB_Y$, where~$B_Y$ is the unit ball in~$Y$.
+    Since~$F$ is equibounded, there exists a neighborhood~$U$ of the zero vector in~$X$ such that~$F(U) \subset rB_Y \subset V$.
+    Therefore,~$F$ is equibounded at some neighborhood of the zero vector in~$X$.
+\end{proof}
+
+Proposition~\eqref{prop3.2} shows us the relationship between those three conditions.
+However, any of those three conditions are difficult to verify in general, 
+while verifying that the condition
+$$ F(x)=\{Tx: T \in F \} $$
+is bounded in~$Y$ for any~$x \in X$ is much easier.
+The following is to prove that the boundedness of~$F(x)$ for any~$x \in X$ implies the equiboundedness of~$F$ under some mild conditions.
+\begin{theorem}[Uniform Boundedness Principle]
+    Let~$X,Y$ be two TVSs and~$F \subset \mathcal{L}(X,Y)$.
+    If~$X$ is a Frechet space and for any~$x \in X$, $F(x)$ is bounded in~$Y$, then~$F$ is equibounded.
+\end{theorem}
+\begin{proof}
+    Assume that~$\|\cdot\|$ is the quasi norm on~$X$ and~$B_r = \{x \in X: \|x\| < r\}$.
+    We only need to verify that there exists a number~$r > 0$ such that~$F(B_r)$ is bounded in~$Y$.
+    Assume that for any~$n \in \NN$, $F(B_{1/n})$ is not bounded in~$Y$.
+    Then for any~$n \in \NN$, there exists a number~$r_n > 0$ such that~$F(B_{1/n}) \supset r_n B_Y$, where~$B_Y$ is the unit ball in~$Y$.
+    For any~$n \in \NN$, there exists a linear operator~$T_n \in F$ such that~$\|T_n\| > nr_n$, which implies that there exists a vector~$x_n \in B_{1/n}$ such that~$\|T_n x_n\| > n r_n > 0$. 
+    Thus we have
+    $$ F(x_n) = \{Tx_n: T \in F\} \supset \{T_n x_n\} $$
+    is not bounded in~$Y$, which contradicts the assumption.
+    Therefore, there exists a number~$r > 0$ such that~$F(B_r)$ is bounded in~$Y$, which implies that~$F$ is equibounded.
+\end{proof}
+It has a useful corollary as follows.
+\begin{corollary}
+    Let~$X,Y$ be two TVSs and~$F \subset \mathcal{L}(X,Y)$.
+    If~$X$ is a Frechet space and for any~$x \in X$, $F(x)$ is bounded in~$Y$, then~$F$ is equicontinuous.
+    Suppose that~$X$ is a Banach space and~$Y$ is a~$B^{*}$ space, if~$\sup_{T \in F} \|T\| = \infty$, then the 
+    set~$E = \{x \in X: \sup_{T \in F} \|Tx\| < \infty\}$ is a first category set in~$X$.
+\end{corollary}
+Uniform boundedness principle is powerful when we analyze the convergence of a sequence of linear operators between two TVSs.
+\begin{theorem}
+    Suppose that~${T_n} \subset \mathcal{L}(X,Y)$ is a sequence of linear operators between two TVSs~$X,Y$ and denote
+    $$ A={x \in X: \lim_{n \to \infty} T_n x \text{ exists in } Y}. $$
+    For any~$x \in A$, we denote~$T(x) = \lim_{n \to \infty} T_n x$.
+    \begin{enumerate}
+        \item If~$A=X$ and~$X$ is a Frechet space, then~$T \in \mathcal{L}(X,Y)$.
+        \item If~$A$ is a second category set and ~$Y$ is complete, then~$T \in \mathcal{L}(X,Y)$.
+        \item Suppose that~$\overline{span(A)}=X$ and~$X,Y$ are Banach spaces. 
+        If~$\sup_{n \in \NN} \|T_n\| < \infty$, then~$T \in \mathcal{L}(X,Y)$ and 
+        $$  \|T\| \leq \varliminf_{n \to \infty} \|T_n\|. $$
+    \end{enumerate}
+\end{theorem}
+\begin{proof}
+    \begin{enumerate}
+        \item For any~$x \in X$, we have~$T_n x \rightarrow T(x)$, which implies that~$T$ is continuous at the zero vector and thus~$T \in \mathcal{L}(X,Y)$.
+        \item Since~$A$ is a second category set in~$X$, there exists a neighborhood~$U$ of the zero vector in~$X$ such that~$A \cap U$ is not a nowhere dense set in~$X$.
+        Thus there exists a neighborhood~$V$ of the zero vector in~$X$ such that~$(A \cap U) + V \subset A \cap U$, which implies that for any~$x \in V$, we have
+        $$ T_n x = T_n (x+x_0) - T_n x_0 \rightarrow T(x+x_0) - T(x_0) $$
+        for some~$x_0 \in A \cap U$. Thus we have that~$T_n x \rightarrow T(x)$ for any~$x \in V$, which implies that~$T$ is continuous at the zero vector and thus~$T \in \mathcal{L}(X,Y)$.
+        \item From (b) we know that~$T \in \mathcal{L}(X,Y)$. Thus we have
+        $$ \|Tx\|=\lim_{n\to\infty} \|T_n x\| = \varliminf_{n\to\infty} \|T_n x\| \leq \varliminf_{n\to\infty} \|T_n\| \cdot \|x\| $$
+        which implies that~$\|T\| \leq \varliminf_{n\to\infty} \|T_n\|$.
+    \end{enumerate}
+\end{proof}
+
+The closed graph theorem and uniform boundedness principle are seemed to be the most powerful
+applications of the open mapping theorem.
+In fact, the following theorem shows that the open mapping theorem, closed graph theorem and uniform boundedness principle are equivalent.
+\begin{theorem}
+    The following conclusions are equivalent:
+    \begin{enumerate}
+        \item Open mapping theorem: If~$X$ is a Frechet space and~$Y$ is a TVS, then any surjective linear operator~$T \in \mathcal{L}(X,Y)$ is an open mapping.
+        \item Closed graph theorem: If~$X,Y$ are two Frechet spaces and~$T: X \rightarrow Y$ is a linear operator, then if the graph of~$T$ is closed in~$X \times Y$, we have~$T \in \mathcal{L}(X,Y)$.
+        \item Uniform boundedness principle: If~$X,Y$ are two TVSs and~$F \subset \mathcal{L}(X,Y)$, then if~$X$ is a Frechet space and for any~$x \in X$, $F(x)$ is bounded in~$Y$, we have that~$F$ is equibounded.
+    \end{enumerate}
+\end{theorem}
+\begin{proof}
+    We only need to verify that (1) implies (2), (2) implies (3) and (3) implies (1).
+
+    (1) $\Rightarrow$ (2): Assume that~$X,Y$ are two Frechet spaces and~$T: X \rightarrow Y$ is a linear operator with a closed graph.
+    We are going to verify that~$T$ is continuous.
+    For any~$y \in Y$ and~$\epsilon > 0$, there exists a neighborhood~$V$ of the zero vector in~$Y$ such that~$y+V \subset B(y,\epsilon)$.
+    Since~$G(T)$ is closed in~$X \times Y$, we have that~$G(T) \cap (X \times (y+V))$ is closed in~$X \times (y+V)$.
+    Since~$G(T) \cap (X \times (y+V))$ is not empty, there exists a neighborhood~$U$ of the zero vector in~$X$ such that
+    $$(U \times (y+V)) \cap G(T) = (U \times (y+V)) \cap G(T) \cap (X \times (y+V)) = U \times (y+V).$$
+    Thus for any~$x \in U$, we have
+    $$(x,T(x)) \in G(T) \cap (X \times (y+V)),$$
+    which implies that
+    $$T(x) \in y + V \subset B(y,\epsilon).$$
+    Therefore,~$T$ is continuous at the zero vector and thus continuous on $X$. 
+
+    (2) $\Rightarrow$ (3): Assume that~(2) holds. Let~$F \subset \mathcal{L}(X,Y)$ be a family of linear operators from~$X$ to~$Y$. 
+    We are going to verify that if for any~$x \in X$, $F(x)$ is bounded in~$Y$, then~$F$ is equibounded.
+    For any finite subset~$\{T_1,T_2,\cdots,T_n\}$ of~$F$, we define a linear operator
+    $$ T: X \rightarrow Y^n, x \mapsto (T_1 x, T_2 x, \cdots, T_n x). $$
+    Since~$F(x)$ is bounded in~$Y$ for any~$x \in X$, we have that~$T$ has a closed graph in~$X \times Y^n$.
+    From (2), we have that~$T \in \mathcal{L}(X,Y^n)$, which implies that~$T$ is continuous and thus~$F$ is equibounded at some neighborhood of the zero vector in~$X$.
+    From Proposition~\eqref{prop3.2}, we have that~$F$ is equicontinuous and thus equibounded.
+
+    (3) $\Rightarrow$ (1): Assume that~(3) holds. Let~$X$ be a Frechet space and~$Y$ be a TVS.
+    We are going to verify that if~$T \in \mathcal{L}(X,Y)$ is surjective, then~$T$ is an open mapping.
+    For any~$r > 0$, we only need to verify that~$T(B_r)$ is a neighborhood of the zero vector in~$Y$, where~$B_r = \{x \in X: \|x\| < r\}$.
+    Assume that for any~$n \in \NN$, $T(B_{1/n})$ is not a neighborhood of the zero vector in~$Y$.
+    Then for any~$n \in \NN$, there exists a neighborhood~$V_n$ of the zero vector in~$Y$ such that~$V_n \cap T(B_{1/n}) = \emptyset$.
+    For any~$n \in \NN$, there exists a linear operator~$T_n \in \mathcal{L}(X,Y)$ such that~$T_n x = T x$ for any~$x \in B_{1/n}$ and~$\|T_n\| > n$.
+    Thus we have that~$F = \{T_n: n \in \NN\}$ is a family of linear operators from~$X$ to~$Y$ such that for any~$x \in X$, $F(x)$ is bounded in~$Y$, but~$F$ is not equibounded, which contradicts the assumption.
+    Therefore, there exists a number~$r > 0$ such that~$T(B_r)$ is a neighborhood of the zero vector in~$Y$, which implies that~$T$ is an open mapping.
 \end{proof}
 
 %%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
