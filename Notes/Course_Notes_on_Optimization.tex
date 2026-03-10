@@ -1,0 +1,662 @@
+%\documentclass[12pt,a4paper]{article}  % Use this line if this document will be released
+\documentclass[12pt,a4paper,draft]{article}  % Use this line if this document is a draft
+\usepackage{ifdraft}
+
+
+%% Bibliography
+\usepackage{etoolbox}
+\newcommand{\bibfile}{\jobname.bib}  % Name of the BibTeX file.
+% ref.bib should be a symbolic link to the universal BibTeX file, which should be a local copy of
+% https://github.com/equipez/bibliographie/blob/main/ref.bib
+% Run `getbib` in the current directory under the draft mode to get the BibTeX file containing only
+% the cited references. The name will be xyz.bib if this TeX file is xyz.tex.
+\newcommand{\universalbib}{ref.bib}
+\ifdraft{\IfFileExists{\universalbib}{\renewcommand{\bibfile}{\universalbib}}{}}{}
+% The counter `cite' is used to count the number of citations.
+\newcounter{cite}
+\pretocmd{\cite}{\stepcounter{cite}}{}{}
+
+
+%% Add line numbers in draft mode
+\RequirePackage[mathlines]{lineno}
+\ifdraft{\linenumbers}{}
+\renewcommand{\linenumberfont}{\normalfont\scriptsize\sffamily\color{gray}}
+\setlength{\linenumbersep}{\marginparsep}
+
+
+%% Geometry
+%\voffset=-1.5cm \hoffset=-1.4cm \textwidth=16cm \textheight=22.0cm  % Luis' setting
+\usepackage[a4paper, textwidth=16.0cm, textheight=22.0cm]{geometry}
+\renewcommand{\baselinestretch}{1.2}
+
+
+%% Basic packages
+\usepackage{amsmath,amsthm,amssymb,amsfonts}
+\usepackage{mathtools}  % Provides \coloneqq
+\usepackage{empheq}
+\usepackage{xcolor}
+\usepackage[bbgreekl]{mathbbol}
+\DeclareSymbolFontAlphabet{\mathbbm}{bbold}
+\DeclareSymbolFontAlphabet{\mathbb}{AMSb}
+\usepackage{bbm}
+\usepackage{upgreek}
+\usepackage{accents}
+\usepackage{xspace}
+\usepackage{rotating}
+\usepackage{multirow,booktabs}
+\usepackage[en-US]{datetime2}
+
+
+%% Format of the table of content
+\usepackage[normalem]{ulem}
+\usepackage[toc,page]{appendix}
+\renewcommand{\appendixpagename}{\Large{Appendix}}
+\renewcommand{\appendixname}{Appendix}
+\renewcommand{\appendixtocname}{Appendix}
+%\usepackage{sectsty}
+\setcounter{tocdepth}{2}
+
+
+%% Section title style
+\usepackage{sectsty}
+\sectionfont{\large}
+\subsectionfont{\large}
+
+
+%% Some colors
+\definecolor{darkblue}{rgb}{0,0.1,0.5}
+\definecolor{darkgreen}{rgb}{0,0.5,0.1}
+\definecolor{darkyellow}{rgb}{0.65,0.65,0.01}
+
+
+%% Todo notes
+\ifdraft{
+    \setlength{\marginparwidth}{2.42cm}
+    \usepackage[tickmarkheight=3pt,textsize=small,backgroundcolor=blue!16,linecolor=purple,bordercolor=purple]{todonotes}
+}{
+    \newcommand{\todo}[1]{}
+    \newcommand{\listoftodos}{}
+}
+
+
+%% Graph, tikz and pgf
+%\usepackage{subfigure}
+\setlength{\unitlength}{1mm}
+% The \unitlength command is a Length command. It defines the units used in the Picture Environment.
+\usepackage{graphicx}
+%\usepackage{tikz,tikzscale,pgf,pgfarrows,pgfnodes,filecontents,tikz-cd}
+\usepackage{tikz,tikzscale,pgf}
+\usetikzlibrary{arrows,arrows.meta,patterns,positioning,decorations.markings,shapes}
+\usepackage{pgfplots}
+\usepackage{pgfplotstable}
+\usepackage[justification=centering]{caption}
+\usepgfplotslibrary{fillbetween}
+\pgfplotsset{compat=1.11}
+
+
+%% Turn off some unharmful warnings in draft mode
+%% N.B.: DO NOT use `silence` together with `hyperref`. They will cause an infinite loop.
+\ifdraft{
+    \usepackage{silence}
+    \WarningFilter{xcolor}{Incompatible color definition on}
+    \WarningFilter{hyperref}{Draft mode on}
+    \WarningFilter{refcheck}{Unused label}
+    \WarningFilter{microtype}{`draft' option active}
+    \WarningFilter{latex}{Writing or overwriting file} % Mute the warning about 'writing/overwriting file'
+    \WarningFilter{latex}{Writing file} % Mute the warning about 'writing/overwriting file'
+    \WarningFilter{latex}{Tab has} % Mute the warning about 'Tab has been converted to Blank Space'
+    \WarningFilter{latex}{Marginpar on page} % Mute the warning about 'Marginpar on page xx moved'
+    \WarningFilter{latex}{author given} % Mute the warning about 'No \author given'
+}{}
+
+
+%% Hyperref, url, and email
+%% N.B.: DO NOT use `silence` together with `hyperref`. They will cause an infinite loop.
+\ifdraft{\usepackage{refcheck}\newcommand{\url}{\texttt}}{
+    \usepackage{hyperref}
+    \hypersetup{colorlinks, linkcolor=darkblue, anchorcolor=darkblue, citecolor=darkblue, urlcolor=darkblue}
+    \usepackage{url}
+} % Check unused labels
+\newcommand{\email}{\texttt}
+
+
+%% Enumerate and itemize
+\usepackage{eqlist}
+\usepackage{enumitem}
+\setlist[itemize]{leftmargin=*}
+\setlist[enumerate]{leftmargin=*,label=\normalfont{(\alph*)}}
+
+
+%% Algorithm environment
+\usepackage[section]{algorithm}
+\usepackage{algpseudocode,algorithmicx}
+\newcommand{\INPUT}{\textbf{Input}}
+\newcommand{\FOR}{\textbf{For}~}
+\algrenewcommand\algorithmicrequire{\textbf{Input:}}
+\algrenewcommand\algorithmicensure{\textbf{Output:}}
+\algrenewcommand\alglinenumber[1]{\normalsize #1.}
+\newcommand*\Let[2]{\State #1 $=$ #2}
+
+
+%% Theorem-like environments
+\newtheorem{theorem}{Theorem}[section]
+\newtheorem{conjecture}{Conjecture}[section]
+\newtheorem{corollary}{Corollary}[section]
+\newtheorem{exercise}{Exercise}[section]
+\newtheorem{lemma}{Lemma}[section]
+\newtheorem{problem}{Problem}[section]
+\newtheorem{proposition}{Proposition}[section]
+\newtheorem{assumption}{Assumption}[section]
+\newtheorem{example}{Example}[section]
+\newtheorem{question}{Question}[section]
+% Change theoremstyle to ``definition'', which uses textnormal for the text.
+\theoremstyle{definition}
+\newtheorem{definition}{Definition}[section]
+\newtheorem{remark}{Remark}[section]
+% proof
+\usepackage{xpatch}
+\xpatchcmd{\proof}{\itshape}{\normalfont\proofnamefont}{}{}
+\newcommand{\proofnamefont}{\bfseries}
+
+%% Equation numbering
+\numberwithin{equation}{section}
+
+
+%% Fine tuning
+\usepackage{microtype}
+\usepackage[nobottomtitles*]{titlesec} % No section title at the bottom of pages
+% Prevent footnote from running to the next page
+\interfootnotelinepenalty=10000
+% No line break in inline math
+\interdisplaylinepenalty=10000
+\relpenalty=10000
+\binoppenalty=10000
+% No widow or orphan lines
+\clubpenalty=10000
+\widowpenalty=10000
+\displaywidowpenalty=10000
+
+
+% Use @ to put 1 math unit (mu) in math
+% See https://nhigham.com/2013/01/07/fine-tuning-spacing-in-latex-equations/
+% and also TeXbook p. 155.
+\mathcode`@="8000{\catcode`\@=\active\gdef@{\mkern1mu}}
+
+
+%% Operators, commands
+\usepackage{relsize}
+\usepackage{nccmath}
+%\DeclareMathOperator*{\mcap}{\,\medmath{\bigcap}\,}
+%\DeclareMathOperator*{\mcup}{\,\medmath{\bigcup}\,}
+\DeclareMathOperator*{\mcap}{\,\mathsmaller{\bigcap}\,}
+\DeclareMathOperator*{\mcup}{\,\mathsmaller{\bigcup}\,}
+%\renewcommand{\cap}{\mcap}
+%\renewcommand{\cup}{\mcup}
+
+\newcommand{\ceil}[1]{ {\lceil{#1}\rceil} }
+\newcommand{\floor}[1]{ {\lfloor{#1}\rfloor} }
+
+\DeclareMathOperator{\tr}{tr}
+\DeclareMathOperator{\sort}{sort}
+\DeclareMathOperator*{\Argmax}{Argmax}
+\DeclareMathOperator*{\Argmin}{Argmin}
+\DeclareMathOperator*{\Arglocmin}{Arglocmin}
+\DeclareMathOperator*{\argmax}{argmax}
+\DeclareMathOperator*{\argmin}{argmin}
+\DeclareMathOperator*{\diag}{diag}
+\DeclareMathOperator*{\Diag}{Diag}
+\DeclareMathOperator{\Span}{span}
+\DeclareMathOperator{\med}{med}
+\DeclareMathOperator{\essinf}{essinf}
+\DeclareMathOperator{\cl}{cl}
+\DeclareMathOperator{\vol}{vol}
+\DeclareMathOperator{\comp}{C}
+\DeclareMathOperator{\sign}{sign}
+\DeclareMathOperator{\rank}{rank}
+\DeclareMathOperator{\range}{range}
+\DeclareMathOperator{\card}{card}
+\DeclareMathOperator{\diam}{diam}
+\DeclareMathOperator{\dist}{dist}
+\newcommand{\disth}{{\operatorname{\updelta_{\sss{H}}}}}
+\newcommand{\ind}{\mathbbm{1}}
+%\newcommand*{\defeq}{\stackrel{\mbox{\normalfont\tiny{\textnormal{def}}}}{=}}
+\newcommand\defeq{\mathrel{\overset{\makebox[0pt]{\mbox{\normalfont\tiny\sffamily def}}}{=}}}
+
+\newcommand{\RR}{\mathbb{R}}
+\newcommand{\BB}{\mathcal{B}}
+\renewcommand{\SS}{\mathbb{S}}
+\newcommand{\TT}{\mathcal{T}}
+\newcommand{\ZZ}{\mathbb{Z}}
+\newcommand{\NN}{\mathbb{N}}
+\newcommand{\FF}{\mathcal{F}}
+\newcommand{\CC}{\mathbb{C}}
+\newcommand{\XX}{\mathcal{X}}
+\newcommand{\sset}{\mathcal{S}}
+\newcommand{\pen}{h}
+\newcommand{\penpar}{\mu}
+\newcommand{\res}{\rho}
+\newcommand{\col}{r}
+\newcommand{\ofd}{\mathcal{F}}
+\newcommand{\stf}[1]{\mathbb{S}^{#1}}
+\newcommand{\sss}[1]{{\scriptscriptstyle{#1}}}
+\newcommand{\sK}{{\scriptscriptstyle{K}}}
+\newcommand{\sT}{{\scriptscriptstyle{T}}}
+\newcommand{\fro}{{\scriptstyle{\textnormal{F}}}}
+\newcommand{\trs}{{\scriptstyle{\mathsf{T}}}}
+\newcommand{\hmt}{{\scriptstyle{{\mathsf{H}}}}}
+\newcommand{\pin}{{\scriptstyle{{\mathsf{+}}}}}
+\newcommand{\inv}{{-1}}
+\newcommand{\adj}{*}
+\newcommand{\ones}{\mathbf{1}}
+
+\newcommand{\cs}{\text{c}}
+\newcommand{\hp}{\circ}
+\newcommand{\cc}{\sss{\textnormal{C}}}
+\newcommand{\dec}{\sss{\textnormal{D}}}
+\newcommand{\cauchy}{\sss{\textnormal{C}}}
+\newcommand{\scauchy}{\sss{\textnormal{S}}}
+\newcommand{\crit}{\textnormal{crit}}
+\newcommand{\rsg}{\hat{\partial}}
+\newcommand{\gsg}{\partial}
+\newcommand{\dom}{\textnormal{dom}}
+\newcommand{\tf}{{\textnormal{f}}}
+\newcommand{\tg}{{\textnormal{g}}}
+\newcommand{\ts}{{\textnormal{s}}}
+\newcommand{\st}{\textnormal{s.t.}}
+\newcommand{\etc}{{etc.}\xspace}
+\newcommand{\ie}{{i.e.}\xspace}
+\newcommand{\eg}{{e.g.}\xspace}
+\newcommand{\etal}{{et al.}\xspace}
+\newcommand{\iid}{\text{i.i.d.}\xspace}
+\newcommand{\as}{\text{a.s.}\xspace}
+
+\newcommand{\me}{\mathrm{e}}
+\newcommand{\md}{\mathrm{d}}
+\newcommand{\mi}{\mathrm{i}}
+\newcommand{\lev}{\mathrm{lev}}
+\newcommand{\bA}{\mathbf{A}}
+\newcommand{\bx}{\mathbf{u}}
+%\newcommand{\bb}{\mathbf{f}}
+\newcommand{\bb}{\mathbf{r}}
+\newcommand{\nov}{n_{\textnormal{o}}}
+\xspaceaddexceptions{]\}}
+% tex.stackexchange.com/questions/15252/why-does-xspace-behave-differently-for-parenthesis-vs-braces-brackets
+\newcommand{\MATLAB}{\textsc{Matlab}\xspace}
+\newcommand{\octave}{\mbox{GNU Octave}\xspace}
+\newcommand{\prblm}{\texttt}
+\DeclareMathAlphabet{\mathsfit}{T1}{\sfdefault}{\mddefault}{\sldefault}
+\SetMathAlphabet{\mathsfit}{bold}{T1}{\sfdefault}{\bfdefault}{\sldefault}
+\newcommand{\prbb}{\mathsfit{p}}
+\newcommand{\pp}{\mathsf{p}}
+\newcommand{\qq}{\mathsf{q}}
+\newcommand{\ttt}{\mathsfit{t}}
+\newcommand{\tol}{\varepsilon}
+\newcommand{\bt}{\mathbf{t}}
+\newcommand{\br}{\mathbf{r}}
+\newcommand{\dd}{\mathbf{d}}
+\newcommand{\ii}{\mathbf{i}}
+\newcommand{\jj}{\mathbf{j}}
+\newcommand{\xx}{\mathbf{x}}
+\renewcommand{\pp}{\mathbf{p}}
+\renewcommand{\ggg}{\mathbf{g}}
+\newcommand{\GG}{\mathbf{G}}
+\DeclareMathOperator{\expc}{\mathbb{E}}
+\renewcommand{\Pr}{\mathbb{P}}
+\newcommand{\lb}{\underline}
+\newcommand{\ub}{\overline}
+
+% mathlcal font
+\DeclareFontFamily{U}{dutchcal}{\skewchar\font=45 }
+\DeclareFontShape{U}{dutchcal}{m}{n}{<-> s*[1.0] dutchcal-r}{}
+\DeclareFontShape{U}{dutchcal}{b}{n}{<-> s*[1.0] dutchcal-b}{}
+\DeclareMathAlphabet{\mathlcal}{U}{dutchcal}{m}{n}
+\SetMathAlphabet{\mathlcal}{bold}{U}{dutchcal}{b}{n}
+
+% mathscr font (supporting lowercase letters)
+%\usepackage[scr=dutchcal]{mathalfa}
+%\usepackage[scr=esstix]{mathalfa}
+%\usepackage[scr=boondox]{mathalfa}
+%\usepackage[scr=boondoxo]{mathalfa}
+\usepackage[scr=boondoxupr]{mathalfa}
+%\newcommand{\model}{\mathscr{h}}
+\newcommand{\model}{\tilde{f}}
+\newcommand{\rmod}{F}
+
+\newcommand{\Set}[1]{\mathcal{#1}}
+\DeclareMathAlphabet{\mathpzc}{OT1}{pzc}{m}{it} % The mathpzc font
+\newcommand{\slv}{\mathpzc}
+% mathpzc looks great, but it stops working on 19 Feb 2020 for no reason.
+%\newcommand{\slv}{\mathscr}
+\newcommand{\software}{\texttt}
+\DeclareMathOperator{\eff}{\mathsf{e}\;\!}
+\DeclareMathOperator{\Eff}{\mathsf{E}\;\!}
+\newcommand{\out}{{\text{out}}}
+
+
+%% Commands for revision
+\newcommand{\red}[1]{\textcolor{red}{#1}}
+\newcommand{\blue}[1]{\textcolor{blue}{#1}}
+\newcommand{\green}[1]{\textcolor{darkgreen}{#1}}
+\newcommand{\TYPO}[1]{{\color{orange}{#1}}}
+\newcommand{\MISTAKE}[1]{{\color{violet}{#1}}}
+\newcommand{\REPHRASE}[1]{{\color{darkgreen}{#1}}}
+\newcommand{\REVISE}[1]{{\color{blue}{#1}}}
+\newcommand{\REVISEred}[1]{{\color{red}{#1}}}
+\newcommand{\COMMENT}{\todo}  % Needs the todonotes package
+%\newcommand{\COMMENT}[1]{\textcolor{brown}{{\small{(comment: #1)}}}}  % This puts comments inline
+
+% Use the following if revision is finished
+%\newcommand{\TYPO}{}
+%\newcommand{\MISTAKE}{}
+%\newcommand{\REPHRASE}{}
+%\newcommand{\REVISE}{}
+%\newcommand{\REVISEred}{}
+%\newcommand{\COMMENT}[1]{}  % Input ignored.
+
+
+%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
+\title{Course Notes on Optimization}
+
+\date{\DTMnow}
+
+\author{
+    Zhu Huatao
+    \thanks{}
+    %\and
+    %Author2
+    %\thanks{Information2}
+}
+
+
+\begin{document}
+
+\maketitle
+
+%\begin{abstract}
+%\end{abstract}
+
+%\textbf{Keywords}: Keyword1, Keyword2
+%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
+
+\section{Basic Properties}
+
+\subsection{Convex Set}
+
+Here we will talk about a kind of subset~$A$ of~$\RR^n$.
+
+\begin{definition} \label{def1.1}
+    For any~$x,y$ in~$A$ and any~$a \in \left[ 0,1 \right]$, if 
+    \[
+    a x + (1-a) y \in A,
+    \]
+    then we say that~$A$ is a \textbf{convex set}.
+\end{definition}
+
+This definition implies that for any~$x,y$ in a convex set~$A$, the line segment connecting~$x$ and~$y$
+is in~$A$. Here are some example of convex sets.
+
+\begin{enumerate}
+    \item An ellipsoid is a convex set. An ellipsoid in~$\RR^n$ can be expressed by
+    $$ x^T B x \leq 1, $$
+    where~$B$ is positive definite and symmetric.
+
+    \item A hyperplane can be expressed by
+    $$ a^T x = b, $$
+    where~$a$ and~$b$ are fixed vector.
+    Any hyperplane and the two half-spaces separated by it are convex sets.
+
+\end{enumerate}
+
+It's straightforward by definition~\eqref{def1.1} that we have following facts of convex sets.
+
+\begin{proposition}
+    For any two convex sets~$A$ and~$B$, the intersection~$A \cap B$ is a convex set.
+\end{proposition}
+
+\begin{proposition}
+    An affine transformation is the composition of a linear transformation and a translation.
+    Every affine transformation~$T: \RR^n \rightarrow \RR^n$ can be expressed by
+    $$ Tx=Ax+b ,$$
+    where~$A \in \RR^{n \times n}$ and~$b \in \RR^n$. We have two following conclusions.
+    \begin{enumerate}
+        \item If~$A$ is a convex set, then~$TA \in \RR^{n \times n}$ is a convex set.
+        \item If~$S$ is a convex set, then~$T^{-1}S \in \RR^{n \times n}$ is a convex set.
+    \end{enumerate}
+\end{proposition}
+
+\begin{proposition}
+    For any two convex sets~$A$ and~$B$, the sum~$A+B$ is a convex set. 
+\end{proposition}
+
+\begin{proposition}
+    For any two convex sets~$A \in \RR^n$ and~$B \in \RR^m$, we have 
+    that~$A \times B$ is convex.
+\end{proposition}
+
+For any three elements~$x_1,x_2$ and~$x_3$ of a convex set~$A$, we have
+$$ a_1 x_1 + a_2 x_2 + a_3 x_3 \in A, $$
+where~$a_1,a_2,a_3 \in \left[ 0,1 \right]$ and~$a_1+a_2+a_3=1$.
+By induction, we can extend this formula to any finite subset of~$A$.
+
+\begin{definition}
+    For any~$x_1,x_2,\cdots,x_n \in A \subset \RR^n$ and~$a_1,a_2,\cdots,a_n \in \left[0,1\right]$ 
+    satisfying~$\sum_{i=1}^{n}a_i=1$, we call~$ \sum_{i=1}^{n}a_i x_i $
+    a \textbf{convex combination} of~$A$.
+\end{definition}
+
+A subset~$A$ is convex if and only if any convex combination of~$A$ is an element of~$A$.
+For any subset~$B$ of~$\RR^n$, we want to find a convex set~$C$ that~$B \subset C$ and any
+convex set that contains~$B$ also contains~$C$. In other words, we want to find the "smallest" 
+convex set that contains~$B$.
+
+\begin{definition}
+    For any set~$A \subset \RR^n$, we say that the \textbf{convex bull}~$A$ is the set of all
+    convex combination of~$A$. We denote it as~$conv(A)$.
+\end{definition}
+
+It's straightforward by the definition of the convex bull that any convex bull is convex 
+and~$conv(A)$ contains~$A$.
+
+\begin{theorem}
+    For any subset~$A \subset \RR^n$, the convex bull of~$A$ contains~$A$ and 
+    any convex set that contains~$A$ also contains~$conv(A)$.
+\end{theorem}
+A straightforward corollary is that~$A=conv(A)$ if and only if~$A$ is a convex set.
+
+\subsection{Affine Set}
+
+\begin{definition}
+    For any~$x_1,x_2,\cdots,x_n \in A \subset \RR^n$ and~$a_1,a_2,\cdots,a_n \in \RR$ 
+    satisfying~$\sum_{i=1}^{n}a_i=1$, we call~$ \sum_{i=1}^{n}a_i x_i $
+    an \textbf{affine combination} of~$A$.
+\end{definition}
+
+An affine combination is a generalization of a convex combination.
+
+\begin{definition} \label{def1.5}
+    For any~$A \subset \RR^n$, if any affine combination of~$A$ is an element of~$A$,
+    we say that~$A$ is an \textbf{affine set}.
+\end{definition}
+If~$A$ is an affine set, then for any two elements~$x,y \in A$, the line passing 
+through~$x$ and~$y$ is in~$A$.
+It's trivial that any convex set is an affine set. Here are some examples of affine set.
+\begin{enumerate}
+    \item Any line is an affine set.
+    \item Any subspace and any hyperplane are both affine sets.
+\end{enumerate}
+Those examples can be straightforwardly verified by definition~\eqref{def1.5}.
+Similar to the convex bull, we also have affine bull.
+
+\begin{definition}
+    For any set~$A \subset \RR^n$, we say that the \textbf{affine bull}~$A$ is the set of all
+    affine combination of~$A$. We denote it as~$aff(A)$.
+\end{definition}
+
+We have that~$aff(A)$ is an affine set and is the "smallest" affine set that
+contains~$A$. It's trivial that~$A=aff(A)$ if and only if~$A$ is an affine set.
+For any set~$A \subset \RR^n$, we can notice that
+$$ A \subset conv(A) \subset aff(A). $$
+
+
+\subsection{Convex Function}
+\begin{definition} \label{def1.7}
+    For any function~$f: D \to \RR$ where~$D \subset \RR^n$ is a convex set, if for any~$x,y \in D$ and any~$a \in \left[ 0,1 \right]$, we have
+    $$ f(ax+(1-a)y) \leq a f(x) + (1-a) f(y), $$
+    then we say that~$f$ is a \textbf{convex function}. If the above inequality is strict for any~$x \neq y$ and any~$a \in (0,1)$, then we say that~$f$ is a \textbf{strictly convex function}.
+    If there exists~$\mu > 0$ such that for any~$x,y \in D$ and any~$a \in \left[ 0,1 \right]$, we have
+    $$ f(ax+(1-a)y) \leq a f(x) + (1-a) f(y) - \frac{\mu}{2} a(1-a) \|x-y\|^2, $$
+    then we say that~$f$ is a~\textbf{$\mu$-strongly convex function}.
+\end{definition}
+For the case of~$n=1$, the definition of convex function can be interpreted as that the line segment connecting any two points on the curve of~$f$ is above the curve. 
+A equivalent definition of~$\mu$-strongly convex function is that~$f(x) - \frac{\mu}{2} \|x\|^2$ is a convex function. 
+This can be straightforwardly verified by Definition~\eqref{def1.7} and the properties of $2$-norm.
+Here are some examples of convex functions.
+\begin{enumerate}
+    \item Any affine function is a convex function. An affine function can be expressed by
+    $$ f(x) = a^T x + b, $$
+    where~$a \in \RR^n$ and~$b \in \RR$ are fixed vector and scalar.
+    \item For any quadratic function~$f(x) = \frac{1}{2} x^T A x + b^T x + c$, where~$A \in \RR^{n \times n}$ is a positive semidefinite matrix,~$b \in \RR^n$ and~$c \in \RR$ are fixed vector and scalar, we have that~$f$ is a convex function.
+\end{enumerate}
+
+In convex analysis, we are often interested in the following function extension:
+\[
+\tilde{f}(x) = \begin{cases}
+    f(x), & x \in D, \\
+    +\infty, & x \notin D.
+\end{cases}
+\]
+The convexity of~$f$ is deeply related to the convexity of~$\tilde{f}(x)$. In fact we have the following result.
+\begin{proposition} \label{prop1.5}
+    For any function~$f: D \to \RR$ where~$D \subset \RR^n$ is a convex set, the function~$\tilde{f}(x)$ defined above is convex if and only if~$f(x)$ is convex.
+\end{proposition}
+\begin{proof}
+    The "only if" part is trivial. For the "if" part, for any~$x,y \in D$ and any~$a \in \left[ 0,1 \right]$, we have
+    $$ f(ax+(1-a)y) = \tilde{f}(ax+(1-a)y) \leq a \tilde{f}(x) + (1-a) \tilde{f}(y) = a f(x) + (1-a) f(y). $$
+    If at least one of~$x$ and~$y$ is not in~$D$, then the above inequality also holds since the right hand side is~$+\infty$.
+    Thus we have that~$\tilde{f}(x)$ is a convex function.
+\end{proof}
+
+For any subset~$A$ of~$\RR^n$, we can define the indicator function~$\delta_A(x)$ as
+\[ \delta_A(x) = \begin{cases}
+    0, & x \in A, \\
+    +\infty, & x \notin A.
+\end{cases} 
+\]
+Similar to Proposition~\eqref{prop1.5}, we can prove that~$\delta_A(x)$ is a convex function if and only if~$A$ is a convex set. In fact, we have the following result.
+\begin{proposition}
+    For any subset~$A$ of~$\RR^n$, the indicator function~$\delta_A(x)$ is a convex function if and only if~$A$ is a convex set.
+\end{proposition}
+\begin{proof}
+    The "if" part is trivial. For the "only if" part, for any~$x,y \in A$ and any~$a \in \left[ 0,1 \right]$, we have
+    $$ \delta_A(ax+(1-a)y) \leq a \delta_A(x) + (1-a) \delta_A(y) = 0. $$
+    Thus we have that~$ax+(1-a)y \in A$. Therefore, we have that~$A$ is a convex set.
+\end{proof}
+
+The above discussion focuses on general convex functions. We are interested in 
+some convex funtions that are first-order or second-order continously differentiable.
+In the following, we will give some equivalent characterizations of convex functions in terms of their first-order or second-order derivatives.
+These characterizations are very useful in optimization since they can be used to verify the convexity of a function in a more convenient way.
+
+We first give the first-order characterization of convex functions. The following result is also known as the first-order condition for convexity.
+\begin{theorem}
+    For any function~$f: D \to \RR$ where~$D \subset \RR^n$ is a convex set and~$f$ is continously differentiable, the following statements are equivalent.
+    \begin{enumerate}
+        \item The function~$f$ is a convex function.
+        \item For any~$x,y \in D$, we have
+        $$ f(y) \geq f(x) + \nabla f(x)^T (y-x). $$
+        \item For any~$x,y \in D$, we have
+        $$ (\nabla f(y) - \nabla f(x))^T (y-x) \geq 0. $$
+    \end{enumerate}
+\end{theorem}
+\begin{proof}
+    (a) $\Rightarrow$ (b): For any~$x,y \in D$ and any~$a \in \left[ 0,1 \right]$, we have
+    \begin{align*}
+        f(ax+(1-a)y) & = f(y+a(x-y)) \\
+        & = f(y)+a \nabla f(y)^T (x-y) + o(\|x-y\|). \\
+    \end{align*}
+    From the above inequality and the convexity of~$f$, we have
+    \[
+    f(y)+a \nabla f(y)^T (x-y) + o(\|x-y\|) \leq a f(x) + (1-a) f(y).
+    \]
+    Thus we have 
+    \[ f(y) \geq f(x) + \nabla f(y)^T (y-x). \]
+    (b) $\Rightarrow$ (a):  For any~$x,y \in D$ and any~$a \in \left[ 0,1 \right]$, we denote~$z=ax+(1-a)y$. 
+    We have
+    \[
+    f(x) \geq f(z) + \nabla f(z)^T (x-z)
+    \]
+    and 
+    \[
+    f(y) \geq f(z) + \nabla f(z)^T (y-z).
+    \]
+    Combining with the definition of~$z$, we have
+    \begin{align*}
+        a f(x) +(1-a) f(y) & \geq f(z) + \nabla f(z)^T (a(x-z)+(1-a)(y-z)) \\
+        & = f(z) + \nabla f(z)^T (z-z)= f(z).
+    \end{align*}
+    (b) $\Rightarrow$ (c): For any~$x,y \in D$, we have
+    \[
+    f(x) \geq f(y) + \nabla f(y)^T (x-y)
+    \]
+    and 
+    \[
+    f(y) \geq f(x) + \nabla f(x)^T (y-x).
+    \]
+    Adding the above two inequalities, we have
+    \[
+    (\nabla f(y) - \nabla f(x))^T (y-x) \geq 0.
+    \]
+    (c) $\Rightarrow$ (b): For any~$x,y \in D$, we have
+    \begin{align*}
+        f(y) & = f(x) + \int_{0}^{1} \nabla f(x+t(y-x))^T (y-x) dt \\
+        & = f(x) + \int_{0}^{1} \nabla f(x)^T (y-x) dt + \int_{0}^{1} (\nabla f(x+t(y-x)) - \nabla f(x))^T (y-x) dt \\
+        & \geq f(x) + \nabla f(x)^T (y-x).
+    \end{align*}
+\end{proof}
+The above result can be interpreted as that the tangent hyperplane of the curve of~$f$ at any point is a global underestimator of~$f$.
+The following result is also known as the second-order condition for convexity.
+\begin{theorem}
+    For any function~$f: D \to \RR$ where~$D \subset \RR^n$ is a convex set and~$f$ is twice continously differentiable.
+    Then~$f$ is convex if and only if the Hessian matrix~$\nabla^2 f(x)$ is positive semidefinite for any~$x \in D$.
+\end{theorem}
+\begin{proof}
+    For the "if" part, for any~$x,y \in D$ and any~$a \in \left[ 0,1 \right]$, we have
+    \[
+    \nabla f(y) - \nabla f(x) = \int_{0}^{1} \nabla^2 f(x+t(y-x)) (y-x) dt.
+    \]
+    Since the Hessian matrix~$\nabla^2 f(x)$ is positive semidefinite for any~$x \in D$, we have
+    \[
+    (\nabla f(y) - \nabla f(x))^T (y-x) = \int_{0}^{1} (y-x)^T \nabla^2 f(x+t(y-x)) (y-x) dt \geq 0.
+    \]
+    This completes the proof of the "if" part.
+
+    For the "only if" part, for any~$x,y \in D$ and any~$a \in \left[ 0,1 \right]$, we denote~$z=ax+(1-a)y$.
+    We have
+    \[ \nabla f(z) - \nabla f(x) = \int_{0}^{1} \nabla^2 f(x+t(z-x)) (z-x) dt. \]
+    Since~$f$ is a convex function, we have
+    \[ (\nabla f(z) - \nabla f(x))^T (z-x) = \int_{0}^{1} (z-x)^T \nabla^2 f(x+t(z-x)) (z-x) dt \geq 0. \]
+    Thus we have
+    \[ (z-x)^T \nabla^2 f(x+t(z-x)) (z-x) \geq 0 \]
+    for any~$t \in [0,1]$. Since~$x$ and~$y$ are arbitrary, we have
+    \[ (y-x)^T \nabla^2 f(x+t(y-x)) (y-x) \geq 0 \]
+    for any~$x,y \in D$ and any~$t \in [0,1]$. This completes the proof of the "only if" part.
+\end{proof}
+Similarly, the second-order condition for~$\mu$-strong convexity is that~$\nabla^2 f(x) \succeq \mu I$ for any~$x \in D$.
+We can also prove that~$\nabla^2 f(x) \succeq 0$ implies the strictly convexity of~$f$. However, the converse is not true. For example, the function~$f(x) = x^4$ is a strictly convex function but its second-order derivative is not positive semidefinite at~$x=0$.
+
+
+
+
+
+
+%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
+%% References
+% Include references only if there are citations.
+\ifnum\value{cite}>0
+    \small
+    \bibliography{\bibfile}
+    \bibliographystyle{plain}
+\fi
+
+%% The end
+\end{document}
