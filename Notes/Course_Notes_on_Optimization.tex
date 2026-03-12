@@ -642,9 +642,48 @@ The following result is also known as the second-order condition for convexity.
     for any~$x,y \in D$ and any~$t \in [0,1]$. This completes the proof of the "only if" part.
 \end{proof}
 Similarly, the second-order condition for~$\mu$-strong convexity is that~$\nabla^2 f(x) \succeq \mu I$ for any~$x \in D$.
-We can also prove that~$\nabla^2 f(x) \succeq 0$ implies the strictly convexity of~$f$. However, the converse is not true. For example, the function~$f(x) = x^4$ is a strictly convex function but its second-order derivative is not positive semidefinite at~$x=0$.
+We can also prove that~$\nabla^2 f(x) \succ  0$ implies the strict convexity of~$f$. However, the converse is not true. For example, the function~$f(x) = x^4$ is a strictly convex function but its second-order derivative is not positive definite at~$x=0$.
 
-
+The composition of a convex function with certain operations is still convex.
+\begin{proposition}
+    For convex functions~$f,f_1,f_2,\cdots,f_n$, the following functions are all convex.
+    \begin{enumerate}
+        \item For any~$a_1,a_2,\cdots,a_n \geq 0$, the function~$g(x) = a_1 f_1(x) + a_2 f_2(x) + \cdots + a_n f_n(x)$ is a convex function.
+        \item For any~$A \in \RR^{m \times n}$ and~$b \in \RR^m$, the function~$h(x) = f(Ax+b)$ is a convex function.
+        \item The function~$k(x) = \max\{f_1(x),f_2(x)\}$ is a convex function.
+    \end{enumerate}
+\end{proposition}
+\begin{proof}
+    \begin{enumerate}
+        \item It's straightforward by the definition of convex functions that~$g(x)$ is a convex function. We only need to notice that
+        the intersection of finite number of convex sets is a convex set and thus the domain of~$g(x)$ is a convex set.
+        \item Since the domain~$D$ of~$f$ is a convex set and the inverse image of a convex set under an affine mapping is convex, we have that the domain of~$h(x)$ is a convex set.
+        For any~$x,y$ in the domain of~$h$ and any~$a \in \left[ 0,1 \right]$, we have
+        \begin{align*}
+            h(ax+(1-a)y) & = f(A(ax+(1-a)y)+b) \\
+            & = f(a(Ax+b)+(1-a)(Ay+b)) \\
+        \end{align*}
+        From the convexity of~$f$, we have
+        \begin{align*}
+            h(ax+(1-a)y)   & \leq a f(Ax+b) + (1-a) f(Ay+b) \\
+            & = a h(x) + (1-a) h(y).
+        \end{align*}
+        Thus we have that~$h(x)$ is a convex function.
+        \item The same as above, we have that the domain of~$k(x)$ is a convex set. For any~$x,y$ in the domain of~$k$ and any~$a \in \left[ 0,1 \right]$, we have
+        \begin{align*}
+            a k(x) + (1-a) k(y) &= a \max\{f_1(x),f_2(x)\} + (1-a) \max\{f_1(y),f_2(y)\} \\
+            & \geq a f_{i}(x) + (1-a) f_{i}(y). \\
+        \end{align*}
+        for~$i=1,2$.
+        From the convexity of~$f_i$, we have
+        \[
+            a k(x) + (1-a) k(y) \geq f_{i}(ax+(1-a)y)
+        \]
+        for~$i=1,2$. Thus we have
+        \[ a k(x) + (1-a) k(y) \geq \max\{f_1(ax+(1-a)y),f_2(ax+(1-a)y)\} = k(ax+(1-a)y). \]
+        Thus we have that~$k(x)$ is a convex function.
+    \end{enumerate}
+\end{proof}
 
 
 

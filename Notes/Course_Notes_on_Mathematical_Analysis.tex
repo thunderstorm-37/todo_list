@@ -1,0 +1,604 @@
+%\documentclass[12pt,a4paper]{article}  % Use this line if this document will be released
+\documentclass[12pt,a4paper,draft]{article}  % Use this line if this document is a draft
+\usepackage{ifdraft}
+
+%% Bibliography
+\usepackage{etoolbox}
+\newcommand{\bibfile}{\jobname.bib}
+\newcommand{\universalbib}{ref.bib}
+\ifdraft{\IfFileExists{\universalbib}{\renewcommand{\bibfile}{\universalbib}}{}}{}
+\newcounter{cite}
+\pretocmd{\cite}{\stepcounter{cite}}{}{}
+
+%% Add line numbers in draft mode
+\RequirePackage[mathlines]{lineno}
+\ifdraft{\linenumbers}{}
+\renewcommand{\linenumberfont}{\normalfont\scriptsize\sffamily\color{gray}}
+\setlength{\linenumbersep}{\marginparsep}
+
+%% Geometry
+\usepackage[a4paper, textwidth=16.0cm, textheight=22.0cm]{geometry}
+\renewcommand{\baselinestretch}{1.2}
+
+%% Basic packages
+\usepackage{amsmath,amsthm,amssymb,amsfonts}
+\usepackage{mathtools}
+\usepackage{empheq}
+\usepackage{xcolor}
+\usepackage[bbgreekl]{mathbbol}
+\DeclareSymbolFontAlphabet{\mathbbm}{bbold}
+\DeclareSymbolFontAlphabet{\mathbb}{AMSb}
+\usepackage{bbm}
+\usepackage{upgreek}
+\usepackage{accents}
+\usepackage{xspace}
+\usepackage{rotating}
+\usepackage{multirow,booktabs}
+\usepackage[en-US]{datetime2}
+
+%% Format of the table of content
+\usepackage[normalem]{ulem}
+\usepackage[toc,page]{appendix}
+\renewcommand{\appendixpagename}{\Large{Appendix}}
+\renewcommand{\appendixname}{Appendix}
+\renewcommand{\appendixtocname}{Appendix}
+\setcounter{tocdepth}{2}
+
+%% Section title style
+\usepackage{sectsty}
+\sectionfont{\large}
+\subsectionfont{\large}
+
+%% Some colors
+\definecolor{darkblue}{rgb}{0,0.1,0.5}
+\definecolor{darkgreen}{rgb}{0,0.5,0.1}
+\definecolor{darkyellow}{rgb}{0.65,0.65,0.01}
+
+%% Todo notes
+\ifdraft{
+    \setlength{\marginparwidth}{2.42cm}
+    \usepackage[tickmarkheight=3pt,textsize=small,backgroundcolor=blue!16,linecolor=purple,bordercolor=purple]{todonotes}
+}{
+    \newcommand{\todo}[1]{}
+    \newcommand{\listoftodos}{}
+}
+
+%% Graph, tikz and pgf
+\setlength{\unitlength}{1mm}
+\usepackage{graphicx}
+\usepackage{tikz,tikzscale,pgf}
+\usetikzlibrary{arrows,arrows.meta,patterns,positioning,decorations.markings,shapes}
+\usepackage{pgfplots}
+\usepackage{pgfplotstable}
+\usepackage[justification=centering]{caption}
+\usepgfplotslibrary{fillbetween}
+\pgfplotsset{compat=1.11}
+
+%% Turn off some unharmful warnings in draft mode
+\ifdraft{
+    \usepackage{silence}
+    \WarningFilter{xcolor}{Incompatible color definition on}
+    \WarningFilter{hyperref}{Draft mode on}
+    \WarningFilter{refcheck}{Unused label}
+    \WarningFilter{microtype}{`draft' option active}
+    \WarningFilter{latex}{Writing or overwriting file}
+    \WarningFilter{latex}{Writing file}
+    \WarningFilter{latex}{Tab has}
+    \WarningFilter{latex}{Marginpar on page}
+    \WarningFilter{latex}{author given}
+}{}
+
+%% Hyperref, url, and email
+\ifdraft{\usepackage{refcheck}\newcommand{\url}{\texttt}}{
+    \usepackage{hyperref}
+    \hypersetup{colorlinks, linkcolor=darkblue, anchorcolor=darkblue, citecolor=darkblue, urlcolor=darkblue}
+    \usepackage{url}
+}
+\newcommand{\email}{\texttt}
+
+%% Enumerate and itemize
+\usepackage{eqlist}
+\usepackage{enumitem}
+\setlist[itemize]{leftmargin=*}
+\setlist[enumerate]{leftmargin=*,label=\normalfont{(\alph*)}}
+
+%% Algorithm environment
+\usepackage[section]{algorithm}
+\usepackage{algpseudocode,algorithmicx}
+\newcommand{\INPUT}{\textbf{Input}}
+\newcommand{\FOR}{\textbf{For}~}
+\algrenewcommand\algorithmicrequire{\textbf{Input}}
+\algrenewcommand\algorithmicensure{\textbf{Output}}
+\algrenewcommand\alglinenumber[1]{\normalsize #1.}
+\newcommand*\Let[2]{\State #1 $=$ #2}
+
+%% Theorem-like environments
+\newtheorem{theorem}{Theorem}[section]
+\newtheorem{conjecture}{Conjecture}[section]
+\newtheorem{corollary}{Corollary}[section]
+\newtheorem{exercise}{Exercise}[section]
+\newtheorem{lemma}{Lemma}[section]
+\newtheorem{problem}{Problem}[section]
+\newtheorem{proposition}{Proposition}[section]
+\newtheorem{assumption}{Assumption}[section]
+\newtheorem{example}{Example}[section]
+\newtheorem{question}{Question}[section]
+\theoremstyle{definition}
+\newtheorem{definition}{Definition}[section]
+\newtheorem{remark}{Remark}[section]
+\usepackage{xpatch}
+\xpatchcmd{\proof}{\itshape}{\normalfont\proofnamefont}{}{}
+\newcommand{\proofnamefont}{\bfseries}
+
+%% Equation numbering
+\numberwithin{equation}{section}
+
+%% Fine tuning
+\usepackage{microtype}
+\usepackage[nobottomtitles*]{titlesec}
+\interfootnotelinepenalty=10000
+\interdisplaylinepenalty=10000
+\relpenalty=10000
+\binoppenalty=10000
+\clubpenalty=10000
+\widowpenalty=10000
+\displaywidowpenalty=10000
+
+\mathcode`@="8000{\catcode`\@=\active\gdef@{\mkern1mu}}
+
+%% Operators, commands
+\usepackage{relsize}
+\usepackage{nccmath}
+\DeclareMathOperator*{\mcap}{\,\mathsmaller{\bigcap}\,}
+\DeclareMathOperator*{\mcup}{\,\mathsmaller{\bigcup}\,}
+\newcommand{\ceil}[1]{ {\lceil{#1}\rceil} }
+\newcommand{\floor}[1]{ {\lfloor{#1}\rfloor} }
+
+\DeclareMathOperator{\tr}{tr}
+\DeclareMathOperator{\sort}{sort}
+\DeclareMathOperator*{\Argmax}{Argmax}
+\DeclareMathOperator*{\Argmin}{Argmin}
+\DeclareMathOperator*{\Arglocmin}{Arglocmin}
+\DeclareMathOperator*{\argmax}{argmax}
+\DeclareMathOperator*{\argmin}{argmin}
+\DeclareMathOperator*{\diag}{diag}
+\DeclareMathOperator*{\Diag}{Diag}
+\DeclareMathOperator{\Span}{span}
+\DeclareMathOperator{\med}{med}
+\DeclareMathOperator{\essinf}{essinf}
+\DeclareMathOperator{\cl}{cl}
+\DeclareMathOperator{\vol}{vol}
+\DeclareMathOperator{\comp}{C}
+\DeclareMathOperator{\sign}{sign}
+\DeclareMathOperator{\rank}{rank}
+\DeclareMathOperator{\range}{range}
+\DeclareMathOperator{\card}{card}
+\DeclareMathOperator{\diam}{diam}
+\DeclareMathOperator{\dist}{dist}
+\newcommand{\disth}{{\operatorname{\updelta_{\sss{H}}}}}
+\newcommand{\ind}{\mathbbm{1}}
+\newcommand\defeq{\mathrel{\overset{\makebox[0pt]{\mbox{\normalfont\tiny\sffamily def}}}{=}}}
+
+\newcommand{\RR}{\mathbb{R}}
+\newcommand{\BB}{\mathcal{B}}
+\renewcommand{\SS}{\mathbb{S}}
+\newcommand{\TT}{\mathcal{T}}
+\newcommand{\ZZ}{\mathbb{Z}}
+\newcommand{\NN}{\mathbb{N}}
+\newcommand{\FF}{\mathcal{F}}
+\newcommand{\CC}{\mathbb{C}}
+\newcommand{\XX}{\mathcal{X}}
+\newcommand{\sset}{\mathcal{S}}
+\newcommand{\pen}{h}
+\newcommand{\penpar}{\mu}
+\newcommand{\res}{\rho}
+\newcommand{\col}{r}
+\newcommand{\ofd}{\mathcal{F}}
+\newcommand{\stf}[1]{\mathbb{S}^{#1}}
+\newcommand{\sss}[1]{{\scriptscriptstyle{#1}}}
+\newcommand{\sK}{{\scriptscriptstyle{K}}}
+\newcommand{\sT}{{\scriptscriptstyle{T}}}
+\newcommand{\fro}{{\scriptstyle{\textnormal{F}}}}
+\newcommand{\trs}{{\scriptstyle{\mathsf{T}}}}
+\newcommand{\hmt}{{\scriptstyle{{\mathsf{H}}}}}
+\newcommand{\pin}{{\scriptstyle{{\mathsf{+}}}}}
+\newcommand{\inv}{{-1}}
+\newcommand{\adj}{*}
+\newcommand{\ones}{\mathbf{1}}
+
+\newcommand{\cs}{\text{c}}
+\newcommand{\hp}{\circ}
+\newcommand{\cc}{\sss{\textnormal{C}}}
+\newcommand{\dec}{\sss{\textnormal{D}}}
+\newcommand{\cauchy}{\sss{\textnormal{C}}}
+\newcommand{\scauchy}{\sss{\textnormal{S}}}
+\newcommand{\crit}{\textnormal{crit}}
+\newcommand{\rsg}{\hat{\partial}}
+\newcommand{\gsg}{\partial}
+\newcommand{\dom}{\textnormal{dom}}
+\newcommand{\tf}{{\textnormal{f}}}
+\newcommand{\tg}{{\textnormal{g}}}
+\newcommand{\ts}{{\textnormal{s}}}
+\newcommand{\st}{\textnormal{s.t.}}
+\newcommand{\etc}{{etc.}\xspace}
+\newcommand{\ie}{{i.e.}\xspace}
+\newcommand{\eg}{{e.g.}\xspace}
+\newcommand{\etal}{{et al.}\xspace}
+\newcommand{\iid}{\text{i.i.d.}\xspace}
+\newcommand{\as}{\text{a.s.}\xspace}
+
+\newcommand{\me}{\mathrm{e}}
+\newcommand{\md}{\mathrm{d}}
+\newcommand{\mi}{\mathrm{i}}
+\newcommand{\lev}{\mathrm{lev}}
+\newcommand{\bA}{\mathbf{A}}
+\newcommand{\bx}{\mathbf{u}}
+\newcommand{\bb}{\mathbf{r}}
+\newcommand{\nov}{n_{\textnormal{o}}}
+\xspaceaddexceptions{]\}}
+\newcommand{\MATLAB}{\textsc{Matlab}\xspace}
+\newcommand{\octave}{\mbox{GNU Octave}\xspace}
+\newcommand{\prblm}{\texttt}
+\DeclareMathAlphabet{\mathsfit}{T1}{\sfdefault}{\mddefault}{\sldefault}
+\SetMathAlphabet{\mathsfit}{bold}{T1}{\sfdefault}{\bfdefault}{\sldefault}
+\newcommand{\prbb}{\mathsfit{p}}
+\newcommand{\pp}{\mathsf{p}}
+\newcommand{\qq}{\mathsf{q}}
+\newcommand{\ttt}{\mathsfit{t}}
+\newcommand{\tol}{\varepsilon}
+\newcommand{\bt}{\mathbf{t}}
+\newcommand{\br}{\mathbf{r}}
+\newcommand{\dd}{\mathbf{d}}
+\newcommand{\ii}{\mathbf{i}}
+\newcommand{\jj}{\mathbf{j}}
+\newcommand{\xx}{\mathbf{x}}
+\renewcommand{\pp}{\mathbf{p}}
+\renewcommand{\ggg}{\mathbf{g}}
+\newcommand{\GG}{\mathbf{G}}
+\DeclareMathOperator{\expc}{\mathbb{E}}
+\renewcommand{\Pr}{\mathbb{P}}
+\newcommand{\lb}{\underline}
+\newcommand{\ub}{\overline}
+
+\DeclareFontFamily{U}{dutchcal}{\skewchar\font=45 }
+\DeclareFontShape{U}{dutchcal}{m}{n}{<-> s*[1.0] dutchcal-r}{}
+\DeclareFontShape{U}{dutchcal}{b}{n}{<-> s*[1.0] dutchcal-b}{}
+\DeclareMathAlphabet{\mathlcal}{U}{dutchcal}{m}{n}
+\SetMathAlphabet{\mathlcal}{bold}{U}{dutchcal}{b}{n}
+\usepackage[scr=boondoxupr]{mathalfa}
+\newcommand{\model}{\tilde{f}}
+\newcommand{\rmod}{F}
+\newcommand{\Set}[1]{\mathcal{#1}}
+\DeclareMathAlphabet{\mathpzc}{OT1}{pzc}{m}{it}
+\newcommand{\slv}{\mathpzc}
+\newcommand{\software}{\texttt}
+\DeclareMathOperator{\eff}{\mathsf{e}\;\!}
+\DeclareMathOperator{\Eff}{\mathsf{E}\;\!}
+\newcommand{\out}{{\text{out}}}
+
+%% Commands for revision
+\newcommand{\red}[1]{\textcolor{red}{#1}}
+\newcommand{\blue}[1]{\textcolor{blue}{#1}}
+\newcommand{\green}[1]{\textcolor{darkgreen}{#1}}
+\newcommand{\TYPO}[1]{{\color{orange}{#1}}}
+\newcommand{\MISTAKE}[1]{{\color{violet}{#1}}}
+\newcommand{\REPHRASE}[1]{{\color{darkgreen}{#1}}}
+\newcommand{\REVISE}[1]{{\color{blue}{#1}}}
+\newcommand{\REVISEred}[1]{{\color{red}{#1}}}
+\newcommand{\COMMENT}{\todo}
+
+%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
+\title{Course Notes on Mathematical Analysis}
+\date{\DTMnow}
+\author{
+    Zhu Huatao
+    \thanks{}
+}
+%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
+
+\begin{document}
+\maketitle
+
+\section{Real Number}
+
+In this section we construct the real number system~$\RR$ from rational numbers.
+Then we establish the completeness of~$\RR$ and present several classical theorems.
+These theorems are equivalent forms of completeness and they are basic tools in analysis.
+
+\subsection{Dedekind Cut}
+
+We start from rational numbers.
+They form an ordered field, and they are dense in themselves.
+Still, they are not complete.
+This gap motivates the construction of~$\RR$.
+
+\begin{definition}[Rational Number]
+A rational number is a number that can be written as a quotient of two integers.
+The denominator is positive.
+The numerator and denominator are coprime.
+\[
+\mathbb{Q}
+=
+\left\{
+\frac{p}{q}
+\;\middle|\;
+p \in \ZZ,\ q \in \NN_{>0},\ (|p|,q)=1
+\right\}.
+\]
+\end{definition}
+
+\begin{definition}[Cut]
+A cut is a subset~$A \subsetneq \mathbb{Q}$ with the following properties
+\begin{enumerate}
+\item~$A \neq \varnothing$
+\item If~$x \in A$ and~$y < x$ with~$y \in \mathbb{Q}$, then~$y \in A$
+\item~$A$ has no greatest element
+\end{enumerate}
+\end{definition}
+
+A cut describes all rational numbers below one location on the number line.
+If that location is rational then the cut corresponds to that rational number.
+If that location is irrational then the cut still makes sense.
+This is the key idea that allows us to define real numbers.
+
+\begin{definition}[Order and Arithmetic on Cuts]
+Let~$A$ and~$B$ be cuts.
+
+\begin{enumerate}
+\item We write~$A \le B$ if~$A \subseteq B$
+\item We write~$A < B$ if~$A \subsetneq B$
+\item We define addition by
+\[
+A+B
+=
+\{a+b \mid a\in A,\ b\in B\}
+\]
+\item If~$A \ge 0$ and~$B \ge 0$, we define multiplication by
+\[
+A\cdot B
+=
+\{ab \mid a\in A,\ b\in B,\ a>0,\ b>0\}\cup\mathbb{Q}_{\le0}
+\]
+\item For a cut~$A$ we define its additive inverse~$-A$ as the unique cut satisfying~$(-A)+A=0$
+\end{enumerate}
+\end{definition}
+
+The next step is to check that these constructions are well defined.
+
+\begin{proposition}
+If~$A$ and~$B$ are cuts then~$A+B$ is a cut.
+If~$A,B\ge0$ then~$A\cdot B$ is a cut.
+\end{proposition}
+
+\begin{proof}
+We first treat~$A+B$.
+
+It is non empty since~$A$ and~$B$ are non empty.
+Choose~$a\in A$ and~$b\in B$.
+Then~$a+b\in A+B$.
+It is not all of~$\mathbb{Q}$ since~$A$ and~$B$ are proper lower sets.
+There exist~$\alpha\notin A$ and~$\beta\notin B$.
+If~$x\in A+B$, write~$x=a+b$ with~$a\in A$ and~$b\in B$.
+Then~$a<\alpha$ and~$b<\beta$, hence~$x<\alpha+\beta$.
+So~$\alpha+\beta\notin A+B$.
+
+Now let~$x\in A+B$ and~$y<x$.
+Take~$x=a+b$.
+Set~$\delta=x-y>0$ and define~$a'=a-\delta$.
+Then~$a'<a$, so~$a'\in A$ by downward closure.
+Also~$y=a'+b$.
+Hence~$y\in A+B$.
+
+Finally~$A+B$ has no greatest element.
+Take~$x=a+b\in A+B$.
+Since~$A$ has no greatest element, choose~$a_1\in A$ with~$a<a_1$.
+Then~$x<a_1+b\in A+B$.
+
+So~$A+B$ is a cut.
+
+For~$A\cdot B$ with~$A,B\ge0$ the argument is parallel.
+It is non empty because~$\mathbb{Q}_{\le0}\subseteq A\cdot B$.
+It is proper because positive factors are bounded above by numbers not in~$A$ and~$B$.
+It is downward closed by construction and positivity.
+It has no greatest element since for positive part one enlarges one factor inside its cut.
+Hence~$A\cdot B$ is a cut.
+\end{proof}
+
+\begin{proposition}
+The set of all cuts with the operations above is an ordered field.
+\end{proposition}
+
+\begin{proof}
+Order properties follow from inclusion.
+Reflexivity, antisymmetry, and transitivity are immediate.
+Totality follows from the cut structure since for two cuts~$A$ and~$B$, either~$A\subseteq B$ or~$B\subseteq A$.
+
+For addition and multiplication one checks closure by the previous proposition.
+Associativity and commutativity follow from corresponding properties in~$\mathbb{Q}$.
+Neutral elements are the cuts corresponding to~$0$ and~$1$.
+Additive inverses exist by definition.
+Multiplicative inverses for positive nonzero cuts are constructed by reciprocal lower sets and then extended by sign.
+Distributivity follows from rational distributivity and set definitions.
+Hence this system is an ordered field.
+\end{proof}
+
+We now define real numbers.
+
+\begin{definition}[Real Number]
+The set of real numbers~$\RR$ is the set of all Dedekind cuts of~$\mathbb{Q}$.
+\end{definition}
+
+This construction explains why~$\RR$ extends~$\mathbb{Q}$ and fills every gap.
+The remaining task is to state and prove completeness in usable forms.
+
+\subsection{Equivalent Forms of Completeness}
+
+We list six classical statements.
+Later we show they are equivalent.
+
+\begin{theorem}[Supremum Principle]\label{supremum}
+Every non empty subset of~$\RR$ that is bounded above has a least upper bound in~$\RR$.
+\end{theorem}
+
+\begin{theorem}[Monotone Convergence Theorem]\label{monotone}
+Every monotone sequence in~$\RR$ that is bounded converges in~$\RR$.
+\end{theorem}
+
+\begin{theorem}[Nested Interval Theorem]\label{nested}
+Let~$I_n=[a_n,b_n]$ with~$I_{n+1}\subseteq I_n$ for all~$n$.
+If~$\lim_{n\to\infty}(b_n-a_n)=0$, then there is exactly one~$x\in\RR$ with~$x\in I_n$ for all~$n$.
+\end{theorem}
+
+\begin{theorem}[Bolzano Weierstrass Theorem]\label{bolzano}
+Every bounded sequence in~$\RR$ has a convergent subsequence.
+\end{theorem}
+
+\begin{theorem}[Cauchy Criterion]\label{cauchy}
+A sequence in~$\RR$ converges if and only if it is a Cauchy sequence.
+\end{theorem}
+
+\begin{theorem}[Heine Borel Theorem]\label{heine-borel}
+A subset of~$\RR$ is compact if and only if it is closed and bounded.
+\end{theorem}
+
+\begin{proof}
+We first prove Theorem~\ref{supremum} from Dedekind cuts.
+Then we prove a cycle of implications among Theorem~\ref{supremum} to Theorem~\ref{heine-borel}.
+
+\textbf{Step 1  The Dedekind Cuts imply the Supremum Principle}
+
+Let~$S\subseteq\RR$ be non empty and bounded above.
+Define
+\[
+U
+=
+\bigcup_{x\in S}x
+\]
+where each~$x$ is a cut.
+
+We show~$U$ is a cut.
+It is non empty since~$S$ is non empty and every cut is non empty.
+It is proper since~$S$ has an upper bound~$M$, so each~$x\in S$ satisfies~$x\subseteq M$, hence~$U\subseteq M\subsetneq\mathbb{Q}$.
+It is downward closed because each~$x$ is downward closed.
+It has no greatest element since if~$u\in U$, then~$u\in x_0$ for some~$x_0\in S$, and~$x_0$ has no greatest element.
+
+So~$U\in\RR$.
+Now every~$x\in S$ satisfies~$x\subseteq U$, so~$x\le U$.
+Thus~$U$ is an upper bound.
+If~$V$ is any upper bound of~$S$, then~$x\subseteq V$ for all~$x\in S$, so~$U\subseteq V$.
+Hence~$U\le V$.
+Therefore~$U=\sup S$.
+
+\textbf{Step 2  The Supremum Principle implies the Monotone Convergence Theorem}
+
+Let~$(x_n)$ be increasing and bounded above.
+Set~$S=\{x_n\mid n\in\NN\}$.
+By supremum principle let~$x=\sup S$.
+Given~$\varepsilon>0$,~$x-\varepsilon$ is not an upper bound of~$S$, so there exists~$N$ with~$x_N>x-\varepsilon$.
+For~$n\ge N$ we have~$x-\varepsilon<x_N\le x_n\le x<x+\varepsilon$.
+Hence~$|x_n-x|<\varepsilon$ for~$n\ge N$.
+So~$x_n\to x$.
+
+\textbf{Step 3  The Monotone Convergence Theorem implies the Nested Interval Theorem}
+
+Define~$a_n$ and~$b_n$ from~$I_n=[a_n,b_n]$.
+Since~$I_{n+1}\subseteq I_n$, sequence~$(a_n)$ is increasing and~$(b_n)$ is decreasing.
+Also~$a_n\le b_n$.
+By monotone convergence there exist~$a=\lim a_n$ and~$b=\lim b_n$.
+Given~$b_n-a_n\to0$, we get~$b-a=0$, so~$a=b$.
+Call this value~$x$.
+Then~$a_n\le x\le b_n$ for all~$n$, hence~$x\in I_n$ for all~$n$.
+Uniqueness follows since interval diameters tend to~$0$.
+
+\textbf{Step 4  The Nested Interval Theorem implies the Bolzano Weierstrass Theorem}
+
+Let~$(x_n)$ be bounded.
+Choose~$[A_1,B_1]$ containing all~$x_n$.
+Bisect it.
+At least one half contains infinitely many terms.
+Call that half~$I_1$.
+Repeat recursively and obtain~$I_k=[A_k,B_k]$ with
+\[
+I_{k+1}\subseteq I_k,\qquad B_k-A_k=\frac{B_1-A_1}{2^{k-1}}
+\]
+and each~$I_k$ contains infinitely many terms.
+By nested interval theorem there exists unique~$x\in\bigcap_k I_k$.
+Choose~$n_k$ strictly increasing with~$x_{n_k}\in I_k$.
+Then~$|x_{n_k}-x|\le B_k-A_k\to0$.
+So~$x_{n_k}\to x$.
+
+\textbf{Step 5  The Bolzano Weierstrass Theorem implies the Cauchy Criterion}
+
+If~$x_n\to x$, then~$(x_n)$ is Cauchy.
+This direction is standard.
+
+Now suppose~$(x_n)$ is Cauchy.
+Every Cauchy sequence is bounded.
+By Bolzano Weierstrass there is a subsequence~$x_{n_k}\to x$.
+Given~$\varepsilon>0$, choose~$N_1$ so that~$m,n\ge N_1$ implies~$|x_m-x_n|<\varepsilon/2$.
+Choose~$K$ so that~$k\ge K$ implies~$n_k\ge N_1$ and~$|x_{n_k}-x|<\varepsilon/2$.
+For~$n\ge N_1$ and~$k\ge K$
+\[
+|x_n-x|
+\le
+|x_n-x_{n_k}|+|x_{n_k}-x|
+<
+\varepsilon
+\]
+Hence~$x_n\to x$.
+
+\textbf{Step 6  The Cauchy Criterion implies the Heine Borel Theorem}
+
+Assume every Cauchy sequence converges.
+
+First show closed and bounded implies compact.
+Let~$K\subseteq\RR$ be closed and bounded.
+Take any sequence in~$K$.
+Boundedness and Bolzano Weierstrass can be recovered from Cauchy criterion by interval bisection and Cauchy subsequences.
+Hence there is a convergent subsequence with limit in~$\RR$.
+Closedness gives limit in~$K$.
+So~$K$ is sequentially compact.
+In metric spaces sequential compactness and compactness are equivalent.
+Thus~$K$ is compact.
+
+Now show compact implies closed and bounded.
+If~K is compact then it is bounded, otherwise one constructs a sequence escaping to infinity with no convergent subsequence.
+It is closed since limits of convergent sequences in~K stay in~K by compactness and uniqueness of limits.
+Hence~K is closed and bounded.
+
+So~K is compact if and only if it is closed and bounded.
+
+\textbf{Step 7  The Heine Borel Theorem implies the Supremum Principle}
+
+Let~$S\subseteq\RR$ be non empty and bounded above.
+Pick~$a\in S$ and an upper bound~$b$.
+Set~$K=[a,b]$.
+By Heine Borel,~K is compact.
+
+Define
+\[
+U=\{x\in K\mid x\ \text{is an upper bound of }S\}
+\]
+Then~U is non empty and closed in~K.
+Define
+\[
+L=\{x\in K\mid x\le s\ \text{for some }s\in S\}
+\]
+Then~L is non empty and closed in~K.
+Also every point of~K belongs to~L or~U.
+By order structure there is a boundary point~c between these two sets.
+One checks~c is an upper bound of~S and every smaller number fails to be an upper bound.
+Hence~c=$\sup S$.
+
+This completes the cycle and proves equivalence of the six theorems.
+\end{proof}
+
+%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
+%% References
+\ifnum\value{cite}>0
+    \small
+    \bibliography{\bibfile}
+    \bibliographystyle{plain}
+\fi
+
+\end{document}
